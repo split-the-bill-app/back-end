@@ -16,7 +16,7 @@ server.use(cors());
 
 server.get('/', (req, res) => {
   res.send(
-    `Welcome to the ${process.env.DB_ENV} environment API of Split The Bill!`,
+    `Welcome to Split The Bill!`,
   );
 });
 
