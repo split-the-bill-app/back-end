@@ -16,13 +16,7 @@ exports.seed = function(knex) {
           split_sum: 33.35,
           split_people_count: 2,
           created_at: moment().format('MMMM Do YYYY, h:mm:ss a'),
-        },
-        {
-          user_id: 3,
-          split_sum: 13.37,
-          split_people_count: 3,
-          created_at: moment().format('MMMM Do YYYY, h:mm:ss a'),
-        },
+        }        
       ]);
     });
 };
