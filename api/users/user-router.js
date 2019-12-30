@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secrets = require('../../data/secrets/secret.js');
+var SECRET = "KEEP IT A SECRET";
 
 const Users = require('./user-model.js');
 
@@ -114,7 +115,8 @@ router.post('/login', (req, res) => {
     .catch(error => {
       res
         .status(500)
-        .json({ error: 'An error occurred during logging in an user.' });
+        .json({ error: 'An error occurred during logging in a user.' });
+        console.log("login error", error);
     });
 });
 
@@ -237,7 +239,8 @@ function generateJWT(user) {
     expiresIn: '1h',
   };
 
-  return jwt.sign(payload, secrets.jwtSecret, options);
+  //return jwt.sign(payload, secrets.jwtSecret, options);
+  return jwt.sign(payload, SECRET, options);
 }
 
 module.exports = router;

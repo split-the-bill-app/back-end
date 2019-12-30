@@ -6,11 +6,11 @@
   "scripts": {
     "start": "node index.js",
     "server": "nodemon index.js",
-    "test": "cross-env DB_ENV=development jest --watch"
+    "test": "cross-env DB_ENV=testing jest --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LambdaSchool/Node-Blog.git"
+    "url": "git+https://github.com/split-the-bill-app/back-end.git"
   },
   "keywords": [
     "node",

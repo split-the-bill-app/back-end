@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 module.exports = {
   development: {
     client: 'sqlite3',
@@ -29,5 +31,6 @@ module.exports = {
     seeds: {
       directory: './data/seeds',
     },
-  },
+  } 
+
 };
