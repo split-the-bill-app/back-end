@@ -53,7 +53,7 @@ router.get(
       } = req;
 
       res.status(500).json({
-        error: `An error occurred during fetching an user with the id ${id}.`,
+        error: `An error occurred during fetching a user with the id ${id}.`,
       });
     }
   },
