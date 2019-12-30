@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const secret = require('../../data/secrets/secret.js');
-var SECRET = "KEEP IT A SECRET";
 
 module.exports = {
   restricted,
@@ -9,7 +8,7 @@ module.exports = {
 function restricted(req, res, next) {
   const token = req.headers.authorization;
 
-  jwt.verify(token, /*secret.jwtSecret*/ SECRET, (error, decodedToken) => {
+  jwt.verify(token, secret.jwtSecret, (error, decodedToken) => {
     error
       ? res
           .status(401)

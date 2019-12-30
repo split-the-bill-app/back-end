@@ -239,8 +239,7 @@ function generateJWT(user) {
     expiresIn: '1h',
   };
 
-  //return jwt.sign(payload, secrets.jwtSecret, options);
-  return jwt.sign(payload, SECRET, options);
+  return jwt.sign(payload, secrets.jwtSecret, options);  
 }
 
 module.exports = router;
