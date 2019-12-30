@@ -8,7 +8,7 @@ exports.seed = function(knex) {
         {
           user_id: 1,
           split_sum: 15.73,
-          split_people_count: 3,
+          split_people_count: 3,          
           created_at: moment().format('MMMM Do YYYY, h:mm:ss a'),
         },
         {

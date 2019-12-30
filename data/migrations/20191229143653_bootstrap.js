@@ -17,7 +17,7 @@ exports.up = function(knex) {
         bills.integer('split_people_count').notNullable();
         bills.float('split_each_amount');     
         bills.string('description');
-        bills.boolean('paid');
+        bills.boolean('paid').defaultTo(false);
         bills
           .integer('user_id')
           .unsigned()
