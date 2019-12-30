@@ -58,13 +58,14 @@ router.post(
   AuthMiddleware.restricted,
   ValidateMiddleware.validateBill,
   (req, res) => {
-    let { split_sum, split_people_count, split_each_amount, user_id } = req.body;
+    let { split_sum, split_people_count, split_each_amount, description, user_id } = req.body;
 
     if (split_sum && split_people_count && split_each_amount && user_id) {
       Bills.add({
         split_sum,
         split_people_count,
         split_each_amount,
+        description,
         user_id,
         created_at: moment().format('MMMM Do YYYY, h:mm:ss a'),
       })
@@ -75,6 +76,7 @@ router.post(
             split_sum: newBill.split_sum,
             split_people_count: newBill.split_people_count,
             split_each_amount: newBill.split_each_amount,
+            description: newBill.description,
             created_at: newBill.created_at,
           });
         })
