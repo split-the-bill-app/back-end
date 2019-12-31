@@ -27,7 +27,7 @@ router.get('/', AuthMiddleware.restricted, async (req, res) => {
 // ADD A NEW NOTIFICATION ARRAY OF EMAILS
 router.post(
   '/',
-  /*AuthMiddleware.restricted,*/
+  AuthMiddleware.restricted,
   ValidateMiddleware.validateNotification,
   (req, res) => {
     let { bill_id, email } = req.body;
