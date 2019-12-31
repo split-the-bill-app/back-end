@@ -236,7 +236,7 @@ function generateJWT(user) {
   };
 
   const options = {
-    expiresIn: '1h',
+    expiresIn: '24h',
   };
 
   return jwt.sign(payload, secrets.jwtSecret, options);  
