@@ -36,6 +36,8 @@ function findUserBills(userId) {
       'b.id',
       'b.split_sum',
       'b.split_people_count',
+      'b.split_each_amount',
+      'b.description',
       'b.created_at',
       'b.user_id',
       'u.email as user_email',
