@@ -93,7 +93,7 @@ function validateNotification(req, res, next) {
 
   if (!body) {
     res.status(400).json({ warning: 'Missing notification data entirely.' });
-  } else if (!split_sum || !email || !bill_id) {
+  } else if (/*!split_sum ||*/ !email || !bill_id) {
     res.status(400).json({
       warning:
         'Missing required email or bill_id information for a notification.',

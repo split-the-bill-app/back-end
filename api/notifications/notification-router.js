@@ -27,7 +27,7 @@ router.get('/', AuthMiddleware.restricted, async (req, res) => {
 // ADD A NEW NOTIFICATION ARRAY OF EMAILS
 router.post(
   '/',
-  AuthMiddleware.restricted,
+  /*AuthMiddleware.restricted,*/
   ValidateMiddleware.validateNotification,
   (req, res) => {
     let { bill_id, email } = req.body;
@@ -53,6 +53,7 @@ router.post(
             res.status(500).json({
               error: 'An error occurred during creating a new notification.',
             });
+            console.log("notification add error", error);
           });
       });
       res.status(201).json({

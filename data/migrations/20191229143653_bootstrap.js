@@ -27,10 +27,10 @@ exports.up = function(knex) {
           .onDelete('RESTRICT')
           .onUpdate('CASCADE');
       })
-      .createTable('notifications', function(bills) {
-        bills.increments();
-        bills.string('email', 128).notNullable();
-        bills
+      .createTable('notifications', function(notifications) {
+        notifications.increments();
+        notifications.string('email', 128).notNullable();
+        notifications
           .integer('bill_id')
           .unsigned()
           .notNullable()
