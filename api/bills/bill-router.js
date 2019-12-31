@@ -130,7 +130,7 @@ router.put(
   async (req, res) => {
     try {
       const {
-        body: { user_id, split_sum, split_people_count, description },
+        body: { user_id, split_sum, split_people_count, split_each_amount, description },
         bill: { id },
       } = req;
 
@@ -138,6 +138,7 @@ router.put(
         user_id,
         split_sum,
         split_people_count,
+        split_each_amount,
         description
       });
 
