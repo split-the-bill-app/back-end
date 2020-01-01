@@ -76,7 +76,7 @@ router.put(
     try {
       const {
         body: { paid },
-        //notification: { id }
+        params: { id }
       } = req;
 
       const successFlag = await Notification.update(id, {        
@@ -89,11 +89,17 @@ router.put(
           })
         : res.status(500).json({
             error: `An error occurred within the database and the notification could not be updated.`
-          });
+          },
+          console.log("update error 1", error)
+          );
+
+         
     } catch (error) {
       res.status(500).json({
-        error: `An error occurred within the database and the notification could not be updated.`
+        error: `An error occurred within the database and the notification could not be updated.`        
       });
+
+      console.log("update error 2", error)
     }
   },
 );
