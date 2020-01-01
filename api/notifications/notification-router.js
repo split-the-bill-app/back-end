@@ -76,7 +76,7 @@ router.put(
     try {
       const {
         body: { paid },
-        notification: { id }
+        //notification: { id }
       } = req;
 
       const successFlag = await Notification.update(id, {        
