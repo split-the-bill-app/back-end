@@ -68,4 +68,34 @@ router.post(
   },
 );
 
+// UPDATE A NOTIFICATION
+router.put(
+  '/:id',
+  AuthMiddleware.restricted,  
+  async (req, res) => {
+    try {
+      const {
+        body: { paid },
+        notification: { id }
+      } = req;
+
+      const successFlag = await Notification.update(id, {        
+        paid        
+      });
+
+      return successFlag > 0
+        ? res.status(200).json({
+            message: `The notification with the id ${id} has been successfully updated!`,
+          })
+        : res.status(500).json({
+            error: `An error occurred within the database and the notification could not be updated.`
+          });
+    } catch (error) {
+      res.status(500).json({
+        error: `An error occurred within the database and the notification could not be updated.`
+      });
+    }
+  },
+);
+
 module.exports = router;
