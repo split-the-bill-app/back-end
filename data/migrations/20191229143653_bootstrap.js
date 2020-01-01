@@ -30,6 +30,7 @@ exports.up = function(knex) {
       .createTable('notifications', function(notifications) {
         notifications.increments();
         notifications.string('email', 128).notNullable();
+        notifications.boolean('paid').defaultTo(false);
         notifications
           .integer('bill_id')
           .unsigned()
