@@ -189,7 +189,7 @@ router.get(
   },
 );
 
-// DELETE ALL NOTIFICATIONS BY BILL IS
+// DELETE ALL NOTIFICATIONS BY BILL ID
 router.delete(
   '/:id/notifications',
   AuthMiddleware.restricted,

@@ -104,4 +104,31 @@ router.put(
   },
 );
 
+// DELETE A NOTIFICATION
+router.delete(
+  '/:id',
+  AuthMiddleware.restricted,  
+  async (req, res) => {
+    try {
+      const {
+        params: { id },
+      } = req;
+
+      const deletedNotification = await Notification.remove(id);
+
+      res.status(200).json({
+        message: `The notification with id ${id} was successfully deleted.`,
+      });
+    } catch (error) {
+      const {
+        params: { id },
+      } = req;
+
+      res.status(500).json({
+        message: `An error occurred during deletion of the notification with id ${id}.`,
+      });
+    }
+  },
+);
+
 module.exports = router;
