@@ -36,7 +36,7 @@ async function validateEmail(req, res, next) {
       params: { email },
     } = req;
 
-    const notification = await Notifications.findBy(email);
+    const notification = await Notifications.findByEmail(email);
     notification
       ? ((req.notification = notification), next())
       : res.status(404).json({

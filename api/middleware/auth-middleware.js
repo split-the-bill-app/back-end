@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-//const secret = require('../../data/secrets/secret.js');
+const secret = require('../../data/secrets/secret.js');
 
 var SECRET = "you will never guess";
 
