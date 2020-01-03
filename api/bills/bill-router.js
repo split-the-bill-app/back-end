@@ -191,9 +191,9 @@ router.get(
 
 // GET ALL NOTIFICATIONS THAT WAS SENT TO AN EMAIL
 router.get(
-  '/:email/notifications',
+  '/notifications/:email',
   AuthMiddleware.restricted,
-  //ValidateMiddleware.validateEmail,
+  ValidateMiddleware.validateEmail,
   async (req, res) => {
     const {
       params: { email },
@@ -212,7 +212,7 @@ router.get(
       const {
         params: { email },
       } = req;
-
+      console.log("get all notification sent to email error", error);
       res.status(500).json({
         error: `A server error occurred while retrieving the notifications for ${email}.`,
       });

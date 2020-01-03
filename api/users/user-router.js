@@ -2,7 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secrets = require('../../data/secrets/secret.js');
-var SECRET = "KEEP IT A SECRET";
+var SECRET = "you will never guess";
 
 const Users = require('./user-model.js');
 
@@ -239,7 +239,7 @@ function generateJWT(user) {
     expiresIn: '24h',
   };
 
-  return jwt.sign(payload, secrets.jwtSecret, options);  
+  return jwt.sign(payload, /*SECRET*/ secrets.jwtSecret, options);  
 }
 
 module.exports = router;

@@ -9,6 +9,7 @@ module.exports = {
   validateBillId,
   validateNotification,
   validateNotificationId,
+  validateEmail
 };
 
 function validateUser(req, res, next) {
