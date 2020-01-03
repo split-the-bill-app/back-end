@@ -189,6 +189,37 @@ router.get(
   },
 );
 
+// GET ALL NOTIFICATIONS THAT WAS SENT TO AN EMAIL
+router.get(
+  '/:email/notifications',
+  AuthMiddleware.restricted,
+  ValidateMiddleware.validateEmail,
+  async (req, res) => {
+    const {
+      params: { email },
+    } = req;
+
+    try {
+      const userNotifications = await Bills.findUserBillNotifications(email);
+      if (userNotifications && userNotifications.length) {
+        res.status(200).json(userNotifications);
+      } else {
+        res.status(404).json({
+          info: `No notifications were found for ${email}.`,
+        });
+      }
+    } catch (error) {
+      const {
+        params: { email },
+      } = req;
+
+      res.status(500).json({
+        error: `A server error occurred while retrieving the notifications for ${email}.`,
+      });
+    }
+  },
+);
+
 // DELETE ALL NOTIFICATIONS BY BILL ID
 router.delete(
   '/:id/notifications',
