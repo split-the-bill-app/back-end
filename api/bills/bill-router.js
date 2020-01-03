@@ -193,7 +193,7 @@ router.get(
 router.get(
   '/:email/notifications',
   AuthMiddleware.restricted,
-  ValidateMiddleware.validateEmail,
+  //ValidateMiddleware.validateEmail,
   async (req, res) => {
     const {
       params: { email },

@@ -20,12 +20,12 @@ function findById(id) {
     .then(notification => (notification ? notification : null));
 }
 
-function findByEmail(email) {
+/*function findByEmail(email) {
   return db('notifications')
     .where('email', email)
     .first()
     .then(notification => (notification ? notification : null));
-}
+}*/
 
 function findBy(filter) {
   return db('notifications')

@@ -35,16 +35,16 @@ async function validateEmail(req, res, next) {
       params: { email },
     } = req;
 
-    const notification = await Notifications.findByEmail(email);
-    user
+    const notification = await Notifications.findBy(email);
+    notification
       ? ((req.notification = notification), next())
       : res.status(404).json({
-          info: `A notification with sent to ${email} was not found during validation.`,
+          info: `A notification sent to ${email} was not found during validation.`,
         });
   } catch (error) {
     res
       .status(500)
-      .json({ error: 'An error occurred during validation of the email.' });
+      .json({ error: 'A server error occurred during validation of the email.' });
   }
 }
 
