@@ -8,6 +8,7 @@ module.exports = {
   add,
   update,
   remove,
+  findUserBillNotifications
 };
 
 function find() {
