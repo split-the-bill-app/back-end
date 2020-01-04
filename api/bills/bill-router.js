@@ -67,7 +67,7 @@ router.post(
         split_each_amount,
         description,
         user_id,
-        created_at: moment().format('MMMM Do YYYY'),
+        created_at: moment().format('MMMM D YYYY'),
       })
         .then(newBill => {
           res.status(201).json({
