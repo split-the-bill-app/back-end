@@ -32,7 +32,7 @@ function findBy(filter) {
 function findBillNotifications(bill_id) {
   return db('notifications as n')
     .join('bills as b', 'b.id', 'n.bill_id')
-    .select('n.id', 'n.email', 'n.bill_id', 'n.paid', 'b.split_each_amount', 'b.description')
+    .select('n.id', 'n.email', 'n.bill_id', 'n.paid', 'b.split_each_amount', 'b.description', 'b.split_people_count')
     .where('n.bill_id', bill_id);
 }
 
