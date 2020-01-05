@@ -222,7 +222,7 @@ router.get(
 
 // GET ALL BILLS/NOTIFICATIONS THAT ARE OWED TO A USER
 router.get(
-  '/notifications/:id',
+  '/notifications/owed/:id',
   AuthMiddleware.restricted,
   ValidateMiddleware.validateUserId,
   async (req, res) => {
