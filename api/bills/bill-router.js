@@ -224,14 +224,14 @@ router.get(
 router.get(
   '/notifications/:id',
   AuthMiddleware.restricted,
-  //ValidateMiddleware.validateUserId,
+  ValidateMiddleware.validateUserId,
   async (req, res) => {
     const {
       params: { id },
     } = req;
 
     try {
-      const userNotifications = await Bills.findUserOwedBills(userId);
+      const userNotifications = await Bills.findUserOwedBills(id);
       if (userNotifications && userNotifications.length) {
         res.status(200).json(userNotifications);
       } else {
