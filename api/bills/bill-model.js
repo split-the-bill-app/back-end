@@ -49,7 +49,7 @@ function findUserOwedBills(userId) {
   return db('users as u') //user who created the bills
     .join('bills as b', 'b.user_id', 'u.id')
     .join('notifications as n', 'n.bill_id', 'b.id') 
-    .select('u.firstname', 'u.lastname', 'u.email', 'b.created_at', 'b.split_each_amount', 'b.description', 'n.paid')    
+    .select('b.created_at', 'b.split_each_amount', 'b.description', 'n.paid', 'n.email')    
     .where('u.id', userId);
     
 }

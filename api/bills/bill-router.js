@@ -220,7 +220,7 @@ router.get(
   },
 );
 
-// GET ALL BILLS THAT ARE OWED TO A USER
+// GET ALL BILLS/NOTIFICATIONS THAT ARE OWED TO A USER
 router.get(
   '/notifications/:id',
   AuthMiddleware.restricted,
