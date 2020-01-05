@@ -224,7 +224,7 @@ router.get(
 router.get(
   '/notifications/:id',
   AuthMiddleware.restricted,
-  ValidateMiddleware.validateUserId,
+  //ValidateMiddleware.validateUserId,
   async (req, res) => {
     const {
       params: { id },
@@ -285,7 +285,7 @@ router.delete(
         });
       } else {
         res.status(404).json({
-          info: `The bill of the id ${id} does not contain any notifications.`,
+          info: `Bill no. ${id} does not contain any notifications.`,
         });
       }
     } catch (error) {
