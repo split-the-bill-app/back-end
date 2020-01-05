@@ -50,7 +50,8 @@ function findUserOwedBills(userId) {
     .join('bills as b', 'b.user_id', 'u.id')
     .join('notifications as n', 'n.bill_id', 'b.id') 
     .select('b.created_at', 'b.split_each_amount', 'b.description', 'n.paid', 'n.email')    
-    .where('u.id', userId);
+    .where('u.id', userId)
+    .andWhere('n.paid', '=', 'false');
     
 }
 
