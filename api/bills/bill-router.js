@@ -220,6 +220,37 @@ router.get(
   },
 );
 
+// GET ALL BILLS THAT ARE OWED TO A USER
+router.get(
+  '/notifications/:id',
+  AuthMiddleware.restricted,
+  ValidateMiddleware.validateUserId,
+  async (req, res) => {
+    const {
+      params: { id },
+    } = req;
+
+    try {
+      const userNotifications = await Bills.findUserOwedBills(userId);
+      if (userNotifications && userNotifications.length) {
+        res.status(200).json(userNotifications);
+      } else {
+        res.status(404).json({
+          info: `No bills owed to user ${id} was found.`,
+        });
+      }
+    } catch (error) {
+      const {
+        params: { id },
+      } = req;
+      console.log("get all bills owed to a user error", error);
+      res.status(500).json({
+        error: `A server error occurred while retrieving bills owed to ${id}.`,
+      });
+    }
+  },
+);
+
 // DELETE ALL NOTIFICATIONS BY BILL ID
 router.delete(
   '/:id/notifications',
