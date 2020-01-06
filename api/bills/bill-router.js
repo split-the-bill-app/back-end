@@ -189,7 +189,7 @@ router.get(
   },
 );
 
-// GET ALL NOTIFICATIONS THAT WAS SENT TO AN EMAIL
+//GET ALL NOTIFICATIONS THAT WAS SENT TO AN EMAIL/BILLS THE EMAIL OWNER OWES(YOU OWE YOUR FRIENDS)
 router.get(
   '/notifications/:email',
   AuthMiddleware.restricted,
@@ -220,7 +220,7 @@ router.get(
   },
 );
 
-// GET ALL BILLS/NOTIFICATIONS THAT ARE OWED TO A USER
+//GET ALL BILLS/NOTIFICATIONS THAT ARE OWED TO A USER/BILLS OWED TO THE LOGGED IN USER(YOUR FRIENDS OWE YOU)
 router.get(
   '/notifications/owed/:id',
   AuthMiddleware.restricted,
@@ -250,6 +250,39 @@ router.get(
     }
   },
 );
+
+//GET ALL PAID BILLS/NOTIFICATIONS FOR THE LOGGED IN USER
+router.get(
+  '/notifications/paid/:id',
+  AuthMiddleware.restricted,
+  ValidateMiddleware.validateUserId,
+  async (req, res) => {
+    const {
+      params: { id },
+    } = req;
+
+    try {
+      const paidBills = await Bills.findAllPaidBills(id);
+      if (paidBills && paidBills.length) {
+        res.status(200).json(paidBills);
+      } else {
+        res.status(404).json({
+          info: `No paid bills owed to user ${id} was found.`,
+        });
+      }
+    } catch (error) {
+      const {
+        params: { id },
+      } = req;
+      console.log("get all paid bills owed to a user error", error);
+      res.status(500).json({
+        error: `A server error occurred while retrieving paid bills owed to ${id}.`,
+      });
+    }
+  },
+);
+
+
 
 // DELETE ALL NOTIFICATIONS BY BILL ID
 router.delete(

@@ -9,7 +9,8 @@ module.exports = {
   update,
   remove,
   findUserBillNotifications,
-  findUserOwedBills  
+  findUserOwedBills,
+  findAllPaidBills  
 };
 
 function find() {
@@ -37,6 +38,7 @@ function findBillNotifications(bill_id) {
     .where('n.bill_id', bill_id);
 }
 
+//you owe your friends
 function findUserBillNotifications(email) {
   return db('notifications as n')
     .join('bills as b', 'b.id', 'n.bill_id') //bill the notification is for
@@ -46,14 +48,24 @@ function findUserBillNotifications(email) {
     
 }
 
+//your friends owe you
 function findUserOwedBills(userId) {
   return db('users as u') //user who created the bills
     .join('bills as b', 'b.user_id', 'u.id')
     .join('notifications as n', 'n.bill_id', 'b.id') 
-    .select('b.created_at', 'b.split_each_amount', 'b.description', 'n.paid', 'n.email')    
+    .select('b.id', 'b.created_at', 'b.split_each_amount', 'b.description', 'n.paid', 'n.email')    
     .where('u.id', userId)
-    .andWhere('n.paid', '=', 'false');
-    
+    .andWhere('n.paid', '=', 'false');    
+}
+
+//find all paid bills for a logged in user
+function findAllPaidBills(userId) {
+  return db('users as u') //user who created the bills
+    .join('bills as b', 'b.user_id', 'u.id')
+    .join('notifications as n', 'n.bill_id', 'b.id') 
+    .select('b.id', 'b.created_at', 'b.split_each_amount', 'b.description', 'n.paid', 'n.email')    
+    .where('u.id', userId)
+    .andWhere('n.paid', '=', 'true');    
 }
 
 function add(bill) {
