@@ -215,7 +215,7 @@ router.get(
       console.log("get all notification sent to email error", error);
       res.status(500).json({
         error: `A server error occurred while retrieving the notifications for ${email}.`,
-      }, error);
+      });
     }
   },
 );

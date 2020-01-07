@@ -83,10 +83,11 @@ router.put(
         paid        
       });
 
-      return successFlag > 0
-        ? res.status(200).json({
+      return successFlag 
+        ? /*res.status(200).json({
             message: `The notification with the id ${id} has been successfully updated!`,
-          })
+          })*/
+          res.status(200).json(successFlag)
         : res.status(500).json({
             error: `An error occurred within the database and the notification could not be updated.`
           },

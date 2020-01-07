@@ -44,7 +44,10 @@ function add(notification) {
 function update(id, changes) {
   return db('notifications')
     .where({ id })
-    .update(changes);
+    .update(changes)
+    .then( count => {
+      return count > 0 ? findById(id) : null;   //return the newly updated notification   
+  })
 }
 
 function remove(id) {
