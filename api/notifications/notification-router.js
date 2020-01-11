@@ -66,7 +66,7 @@ router.post(
         message: 'The notification(s) have been successfully persisted.',
       });*/
 
-      if(createdNotification){
+      if(createdNotification.length > 0){
 
         createdNotification.forEach(notification => {
 
