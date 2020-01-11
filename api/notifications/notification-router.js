@@ -68,6 +68,16 @@ router.post(
       });
 
     }//end else  
+
+          
+      goSend.twilioNotification(
+      "tishayann@gmail.com",
+      "tisha",
+      "holder",
+      "20",
+      "dinner",
+      "01-11-20"
+      );
     
   }//end endpoint
 );//end router.post
