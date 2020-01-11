@@ -63,12 +63,12 @@ router.post(
     
               //try {        
                 goSend.twilioNotification(
-                notification.email,
-                activeUser.firstName,
-                activeUser.lastName,
-                billForNotification.split_each_amount,
-                billForNotification.description,
-                billForNotification.created_at
+                "tishayann@gmail.com",
+                "tisha",
+                "holder",
+                "20",
+                "dinner",
+                "01-11-20"
                 );
     
               //}catch(error){
