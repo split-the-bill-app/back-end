@@ -93,8 +93,8 @@ router.post(
              }catch(error){
               console.log("twilio send notification error", error),
   
-              res.status(204).json({
-                addedNotifications
+              res.status(500).json({
+                message: "twilio send notification error"
               });
              }
   
@@ -102,16 +102,15 @@ router.post(
   
         }//end if   
         else {
-          res.status(404).json(
-            //message: `No created notifications were found for bill ${bill_id}.`
-            addedNotifications
-          );
+          res.status(404).json({
+            message: `No created notifications were found for bill ${bill_id}.`
+            
+          });
   
         }//end else  
   
         
       })
-
             
       res.status(201).json(
         addedNotifications
