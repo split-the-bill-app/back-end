@@ -1,6 +1,10 @@
 const express = require('express');
 
 const Notification = require('./notification-model.js');
+const Users = require('../users/user-model.js');
+const Bills = require('../bills/bill-model.js');
+
+const goSend = require('../../utils/sendgrid');
 
 const router = express.Router();
 
@@ -29,7 +33,7 @@ router.post(
   '/',
   AuthMiddleware.restricted,
   ValidateMiddleware.validateNotification,
-  (req, res) => {
+   (req, res) => {
     let { bill_id, email } = req.body;
 
     if (
@@ -37,11 +41,11 @@ router.post(
       email &&
       Object.keys(req.body).length == 2 &&
       Array.isArray(email)
-    ) {
+      ){
       let createdNotification = [];
 
       email.forEach(email => {
-        Notification.add({ bill_id, email })
+         Notification.add({ bill_id, email })
           .then(newNotification => {
             createdNotification.push({
               id: newNotification.id,
@@ -59,14 +63,56 @@ router.post(
       res.status(201).json({
         message: 'The notification(s) have been successfully persisted.',
       });
+
+      if(createdNotification.length > 0){
+
+        createdNotification.forEach(email => {
+
+          //find bill for the bill_id entered as part of req.body
+          const [billForNotification] = Bills.findById(bill_id);
+
+          // Create notification for invite
+          const [activeUser] = Users.findById(billForNotification.user_id);
+
+          /*try {        
+              const twilioNotificationContent = {
+                sendToEmail: email,
+                activeUserId: activeUser.id,
+                activeUserFirstName: activeUser.firstname,
+                activeUserLastName: activeUser.lastname,
+                split_each_amount: billForNotification.split_each_amount,
+                description: billForNotification.description,
+                created_at: billForNotification.created_at            
+          }; */ 
+        
+           goSend.twilioNotification(
+           email,
+           activeUser.firstName,
+           activeUser.lastName,
+           billForNotification.split_each_amount,
+           billForNotification.description,
+           billForNotification.created_at
+          );
+
+        })//end forEach
+
+      }//end if   
+      else {
+        res.status(404).json({
+          message: `No created notifications were found for bill ${bill_id}.`
+        });
+
+      }//end else    
+
     } else {
       res.status(400).json({
         warning:
           'Not all information were provided to create a new notification.',
       });
-    }
-  },
-);
+    }//end else
+  }//end async
+);//end router.post
+
 
 // UPDATE A NOTIFICATION
 router.put(
