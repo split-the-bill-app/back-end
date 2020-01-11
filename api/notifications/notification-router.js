@@ -68,7 +68,7 @@ router.post(
 
       if(createdNotification){
 
-        createdNotification.forEach(emailIn => {
+        createdNotification.forEach(notification => {
 
           //find bill for the bill_id entered as part of req.body
           const [billForNotification] = Bills.findById(bill_id);
@@ -90,7 +90,7 @@ router.post(
           try {
         
             goSend.twilioNotification(
-            emailIn,
+            notification.email,
             activeUser.firstName,
             activeUser.lastName,
             billForNotification.split_each_amount,
