@@ -30,10 +30,10 @@ router.get('/', AuthMiddleware.restricted, async (req, res) => {
 
 // ADD A NEW NOTIFICATION ARRAY OF EMAILS
 router.post(
-  '/',
+  '/', 
   AuthMiddleware.restricted,
   ValidateMiddleware.validateNotification,
-   (req, res) => {
+    (req, res) => {
     let { bill_id, email } = req.body;
 
     let createdNotification = [];
@@ -47,7 +47,7 @@ router.post(
       
 
       email.forEach(email => {
-         Notification.add({ bill_id, email })
+          Notification.add({ bill_id, email })
           .then(newNotification => {
             createdNotification.push({
               id: newNotification.id,
@@ -66,9 +66,11 @@ router.post(
         message: 'The notification(s) have been successfully persisted.',
       });*/
 
-      if(createdNotification){
+      const addedNotifications = Notification.find();
 
-        createdNotification.forEach(notification => {
+      if(addedNotifications){
+
+        addedNotifications.forEach(notification => {
 
           //find bill for the bill_id entered as part of req.body
           const [billForNotification] = Bills.findById(bill_id);
@@ -117,7 +119,7 @@ router.post(
       }//end else  
       
       res.status(201).json(
-      createdNotification
+        addedNotifications
       );
 
     } else {
