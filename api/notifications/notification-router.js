@@ -69,15 +69,34 @@ router.post(
 
     }//end else  
 
+    try{
+
+      Bills.findBillNotifications(bill_id)
+      .then(billNotifications => {
+        billNotifications.forEach(notification => {
+
+          goSend.twilioNotification(
+            notification.email,
+            "tisha",
+            "holder",
+            notification.split_each_amount,
+            notification.description,
+            notification.created_at
+            );
+
+        })
+      })
+     
+
+    }
+    catch(error){
+
+      console.log("twilio send error", error);
+
+    }
+
           
-      goSend.twilioNotification(
-      "tishayann@gmail.com",
-      "tisha",
-      "holder",
-      "20",
-      "dinner",
-      "01-11-20"
-      );
+     
     
   }//end endpoint
 );//end router.post
