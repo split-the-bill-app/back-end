@@ -71,10 +71,10 @@ router.post(
     }//end else  
     
     //find bill for the bill_id entered as part of req.body
-    const [billForNotification] = await Bills.findById(bill_id);
+    const billForNotification = await Bills.findById(bill_id);
 
     // Create notification for invite
-    const [activeUser] = await Users.findById(billForNotification.user_id);
+    const activeUser = await Users.findById(billForNotification.user_id);
 
 
       await Bills.findBillNotifications(bill_id)
