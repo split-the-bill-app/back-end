@@ -84,15 +84,23 @@ router.post(
                 description: billForNotification.description,
                 created_at: billForNotification.created_at            
           }; */ 
+
+          try {
         
-           goSend.twilioNotification(
-           email,
-           activeUser.firstName,
-           activeUser.lastName,
-           billForNotification.split_each_amount,
-           billForNotification.description,
-           billForNotification.created_at
-          );
+            goSend.twilioNotification(
+            email,
+            activeUser.firstName,
+            activeUser.lastName,
+            billForNotification.split_each_amount,
+            billForNotification.description,
+            billForNotification.created_at
+            );
+
+           }catch(error){
+            res.status(500).json({
+              error
+            });
+           }
 
         })//end forEach
 
