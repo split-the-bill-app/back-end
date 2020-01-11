@@ -12,7 +12,7 @@ exports.twilioNotification = (email, activeUserFirstName, activeUserLastName, sp
       subject: `${activeUserFirstName} has sent you a bill notification from SplittheBillApp`,
       text: `${activeUserFirstName} has sent you a bill notification from <a href='https://www.splitthebillmain.netlify.com/'>SplittheBillMain.netlify.com</a>`,
       html: `<section style="display:flex; align-items:center; justify-content:center; text-align:center; justify-items:center; vertical-align:center;">              
-             You owe <strong style="color:#5557FE;">  ${activeUserFirstName} ${activeUserLastName}  </strong> $${split_each_amount} for ${description} on ${created_at}.
+             You owe <strong style="color:#5557FE;">&nbsp;${activeUserFirstName} ${activeUserLastName}&nbsp;</strong> $${split_each_amount} for ${description} on ${created_at}.
              </section>`
     };
     sgMail.send(msg);

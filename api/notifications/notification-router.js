@@ -46,8 +46,8 @@ router.post(
       Array.isArray(email)
       ){      
 
-      email.forEach(email => {
-          Notification.add({ bill_id, email })
+      await email.forEach(email => {
+           Notification.add({ bill_id, email })
           .then(newNotification => {
             createdNotification.push({
               id: newNotification.id,
@@ -68,18 +68,16 @@ router.post(
           'Not all information were provided to create a new notification.',
       });
 
-    }//end else  
-
-   
+    }//end else     
 
       await Bills.findBillNotifications(bill_id)
       .then(billNotifications => {
-        billNotifications.forEach(notification => {
+         billNotifications.forEach(notification => {
 
-          goSend.twilioNotification(
+           goSend.twilioNotification(
             notification.email,
-            "tisha",
-            "holder",
+            "tishay",
+            "ann",
             notification.split_each_amount,
             notification.description,
             notification.created_at
