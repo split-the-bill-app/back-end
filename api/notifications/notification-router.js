@@ -67,7 +67,7 @@ router.post(
       });*/
 
      
-      Notification.find()
+      Notification.findBy(bill_id)
       .then(addedNotifications => {
 
         if(addedNotifications.length > 0){
