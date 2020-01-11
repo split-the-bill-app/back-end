@@ -68,7 +68,7 @@ router.post(
 
       const addedNotifications = Notification.find();
 
-      if(addedNotifications){
+      if(addedNotifications.length > 0){
 
         addedNotifications.forEach(notification => {
 
@@ -100,9 +100,10 @@ router.post(
 
       }//end if   
       else {
-        res.status(404).json({
-          message: `No created notifications were found for bill ${bill_id}.`
-        });
+        res.status(404).json(
+          //message: `No created notifications were found for bill ${bill_id}.`
+          addedNotifications
+        );
 
       }//end else  
       
