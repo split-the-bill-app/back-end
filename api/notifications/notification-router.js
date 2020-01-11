@@ -37,6 +37,8 @@ router.post(
     let { bill_id, email } = req.body;
 
     let createdNotification = [];
+    let notifBill = {};
+    let notifUser = {};
 
     if (
       bill_id &&
@@ -74,20 +76,27 @@ router.post(
 
           addedNotifications.forEach(notification => {
   
-            //find bill for the bill_id entered as part of req.body
-            const [billForNotification] = Bills.findById(bill_id);
+            //find bill for the bill_id entered as part of req.body            
+            Bills.findById(bill_id)
+            .then(billForNotification => {
+              notifBill = billForNotification;
+
+            })
   
-            // Create notification for invite
-            const [activeUser] = Users.findById(billForNotification.user_id);          
+            // Create notification for invite           
+            Users.findById(billForNotification.user_id)
+            .then(activeUser => {
+              notifUser = activeUser;
+            })      
   
             try {        
               goSend.twilioNotification(
               notification.email,
-              activeUser.firstName,
-              activeUser.lastName,
-              billForNotification.split_each_amount,
-              billForNotification.description,
-              billForNotification.created_at
+              notifUser.firstName,
+              notifUser.lastName,
+              notifBill.split_each_amount,
+              notifBill.description,
+              notifBill.created_at
               );
   
              }catch(error){
