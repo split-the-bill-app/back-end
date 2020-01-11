@@ -69,7 +69,7 @@ router.post(
 
     }//end else  
 
-    try{
+   
 
       Bills.findBillNotifications(bill_id)
       .then(billNotifications => {
@@ -86,16 +86,12 @@ router.post(
 
         })
       })
-     
-
-    }
-    catch(error){
-
-      console.log("twilio send error", error);
-
-    }
-
-          
+      .catch(err => {
+        res.status(500).json({
+          error:
+            'An error occurred while sending twilio notifications!'
+        })
+      })         
      
     
   }//end endpoint
