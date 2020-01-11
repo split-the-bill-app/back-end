@@ -68,7 +68,14 @@ router.post(
           'Not all information were provided to create a new notification.',
       });
 
-    }//end else     
+    }//end else  
+    
+    //find bill for the bill_id entered as part of req.body
+    const [billForNotification] = await Bills.findById(bill_id);
+
+    // Create notification for invite
+    const [activeUser] = await Users.findById(billForNotification.user_id);
+
 
       await Bills.findBillNotifications(bill_id)
       .then(billNotifications => {
@@ -76,8 +83,8 @@ router.post(
 
            goSend.twilioNotification(
             notification.email,
-            "tishay",
-            "ann",
+            activeUser.firstname,
+            activeUser.lastname,
             notification.split_each_amount,
             notification.description,
             notification.created_at
