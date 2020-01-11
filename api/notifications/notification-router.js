@@ -90,13 +90,16 @@ router.post(
       .catch(err => {
         res.status(500).json({
           error:
-            'An error occurred while sending twilio notifications!'
+            'An error occurred while sending twilio notifications 1!'
         })
       }) 
 
     }//end outer try
     catch(error){
-      console.log("post catch error", error)
+      res.status(500).json({
+        error:
+          'An error occurred while sending twilio notifications 2!'
+      })
 
     }   
     
