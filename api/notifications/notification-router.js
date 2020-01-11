@@ -97,7 +97,11 @@ router.post(
             );
 
            }catch(error){
-            console.log("twilio send notification error", error);
+            console.log("twilio send notification error", error),
+
+            res.status(500).json({
+              error
+            });
            }
 
         })//end forEach
