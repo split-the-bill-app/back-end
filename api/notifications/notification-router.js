@@ -4,7 +4,7 @@ const Notification = require('./notification-model.js');
 const Users = require('../users/user-model.js');
 const Bills = require('../bills/bill-model.js');
 
-const goSend = require('../../utils/sendgrid');
+const goSend = require('../../utils/sendgrid.js');
 
 const router = express.Router();
 
@@ -33,7 +33,7 @@ router.post(
   '/', 
   AuthMiddleware.restricted,
   ValidateMiddleware.validateNotification,
-    (req, res) => {
+  async (req, res) => {
     let { bill_id, email } = req.body;
 
     let createdNotification = [];
@@ -86,9 +86,9 @@ router.post(
               console.log("notification add error", error);
             });
       });
-      /*res.status(201).json({
+      res.status(201).json({
         message: 'The notification(s) have been successfully persisted.',
-      });*/
+      });
 
      
       /*Notification.find()
@@ -136,9 +136,7 @@ router.post(
         
       })*/
             
-      res.status(201).json(
-        addedNotifications
-      );
+     
 
     } else {
       res.status(400).json({
