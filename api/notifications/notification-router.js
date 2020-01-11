@@ -36,13 +36,15 @@ router.post(
    (req, res) => {
     let { bill_id, email } = req.body;
 
+    let createdNotification = [];
+
     if (
       bill_id &&
       email &&
       Object.keys(req.body).length == 2 &&
       Array.isArray(email)
       ){
-      let createdNotification = [];
+      
 
       email.forEach(email => {
          Notification.add({ bill_id, email })
