@@ -116,10 +116,9 @@ router.post(
 
       }//end else  
       
-      res.status(201).json({
-        message: 'The notification(s) have been successfully persisted.',
-      },
-      createdNotification);
+      res.status(201).json(
+      createdNotification
+      );
 
     } else {
       res.status(400).json({
