@@ -66,47 +66,53 @@ router.post(
         message: 'The notification(s) have been successfully persisted.',
       });*/
 
-      const addedNotifications = Notification.find();
+     
+      Notification.find()
+      .then(addedNotifications => {
 
-      if(addedNotifications.length > 0){
+        if(addedNotifications.length > 0){
 
-        addedNotifications.forEach(notification => {
+          addedNotifications.forEach(notification => {
+  
+            //find bill for the bill_id entered as part of req.body
+            const [billForNotification] = Bills.findById(bill_id);
+  
+            // Create notification for invite
+            const [activeUser] = Users.findById(billForNotification.user_id);          
+  
+            try {        
+              goSend.twilioNotification(
+              notification.email,
+              activeUser.firstName,
+              activeUser.lastName,
+              billForNotification.split_each_amount,
+              billForNotification.description,
+              billForNotification.created_at
+              );
+  
+             }catch(error){
+              console.log("twilio send notification error", error),
+  
+              res.status(204).json({
+                addedNotifications
+              });
+             }
+  
+          })//end forEach
+  
+        }//end if   
+        else {
+          res.status(404).json(
+            //message: `No created notifications were found for bill ${bill_id}.`
+            addedNotifications
+          );
+  
+        }//end else  
+  
+        
+      })
 
-          //find bill for the bill_id entered as part of req.body
-          const [billForNotification] = Bills.findById(bill_id);
-
-          // Create notification for invite
-          const [activeUser] = Users.findById(billForNotification.user_id);          
-
-          try {        
-            goSend.twilioNotification(
-            notification.email,
-            activeUser.firstName,
-            activeUser.lastName,
-            billForNotification.split_each_amount,
-            billForNotification.description,
-            billForNotification.created_at
-            );
-
-           }catch(error){
-            console.log("twilio send notification error", error),
-
-            res.status(204).json({
-              addedNotifications
-            });
-           }
-
-        })//end forEach
-
-      }//end if   
-      else {
-        res.status(404).json(
-          //message: `No created notifications were found for bill ${bill_id}.`
-          addedNotifications
-        );
-
-      }//end else  
-      
+            
       res.status(201).json(
         addedNotifications
       );
