@@ -33,7 +33,8 @@ router.post(
   '/', 
   AuthMiddleware.restricted,
   ValidateMiddleware.validateNotification,
-  (req, res) => {
+  async (req, res) => {
+  try {
     let { bill_id, email } = req.body;
 
     let createdNotification = [];
@@ -71,7 +72,7 @@ router.post(
 
    
 
-      Bills.findBillNotifications(bill_id)
+      await Bills.findBillNotifications(bill_id)
       .then(billNotifications => {
         billNotifications.forEach(notification => {
 
@@ -91,8 +92,13 @@ router.post(
           error:
             'An error occurred while sending twilio notifications!'
         })
-      })         
-     
+      }) 
+
+    }//end outer try
+    catch(error){
+      console.log("post catch error", error)
+
+    }   
     
   }//end endpoint
 );//end router.post
