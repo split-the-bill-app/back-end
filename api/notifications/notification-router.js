@@ -60,9 +60,9 @@ router.post(
             console.log("notification add error", error);
           });
       });
-      res.status(201).json({
+      /*res.status(201).json({
         message: 'The notification(s) have been successfully persisted.',
-      });
+      });*/
 
       if(createdNotification.length > 0){
 
@@ -97,9 +97,7 @@ router.post(
             );
 
            }catch(error){
-            res.status(500).json({
-              error
-            });
+            console.log("twilio send notification error", error);
            }
 
         })//end forEach
@@ -110,7 +108,11 @@ router.post(
           message: `No created notifications were found for bill ${bill_id}.`
         });
 
-      }//end else    
+      }//end else  
+      
+      res.status(201).json({
+        message: 'The notification(s) have been successfully persisted.',
+      });
 
     } else {
       res.status(400).json({
