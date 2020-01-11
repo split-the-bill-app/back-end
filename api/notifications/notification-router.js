@@ -76,21 +76,9 @@ router.post(
           const [billForNotification] = Bills.findById(bill_id);
 
           // Create notification for invite
-          const [activeUser] = Users.findById(billForNotification.user_id);
+          const [activeUser] = Users.findById(billForNotification.user_id);          
 
-          /*try {        
-              const twilioNotificationContent = {
-                sendToEmail: email,
-                activeUserId: activeUser.id,
-                activeUserFirstName: activeUser.firstname,
-                activeUserLastName: activeUser.lastname,
-                split_each_amount: billForNotification.split_each_amount,
-                description: billForNotification.description,
-                created_at: billForNotification.created_at            
-          }; */ 
-
-          try {
-        
+          try {        
             goSend.twilioNotification(
             notification.email,
             activeUser.firstName,
@@ -103,8 +91,8 @@ router.post(
            }catch(error){
             console.log("twilio send notification error", error),
 
-            res.status(500).json({
-              message: "twilio send notification error"
+            res.status(204).json({
+              addedNotifications
             });
            }
 
