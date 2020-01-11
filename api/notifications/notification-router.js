@@ -37,8 +37,6 @@ router.post(
     let { bill_id, email } = req.body;
 
     let createdNotification = [];
-    let notifBill = {};
-    let notifUser = {};
 
     if (
       bill_id &&
@@ -56,47 +54,64 @@ router.post(
               bill_id: newNotification.bill_id,
               email: newNotification.email,
             });
-          })
-          .catch(error => {
-            res.status(500).json({
-              error: 'An error occurred during creating a new notification.',
+
+              //find bill for the bill_id entered as part of req.body
+              const [billForNotification] = Bills.findById(bill_id);
+    
+              // Create notification for invite
+              const [activeUser] = Users.findById(billForNotification.user_id);          
+    
+              try {        
+                goSend.twilioNotification(
+                notification.email,
+                activeUser.firstName,
+                activeUser.lastName,
+                billForNotification.split_each_amount,
+                billForNotification.description,
+                billForNotification.created_at
+                );
+    
+              }catch(error){
+                console.log("twilio send notification error", error),
+    
+                res.status(500).json({
+                  message: "twilio send notification error"
+                });
+              }
+            })
+            .catch(error => {
+              res.status(500).json({
+                error: 'An error occurred during creating a new notification.',
+              });
+              console.log("notification add error", error);
             });
-            console.log("notification add error", error);
-          });
       });
       /*res.status(201).json({
         message: 'The notification(s) have been successfully persisted.',
       });*/
 
      
-      Notification.findBy(bill_id)
+      /*Notification.find()
       .then(addedNotifications => {
 
         if(addedNotifications.length > 0){
 
           addedNotifications.forEach(notification => {
   
-            //find bill for the bill_id entered as part of req.body            
-            Bills.findById(bill_id)
-            .then(billForNotification => {
-              notifBill = billForNotification;
-
-            })
+            //find bill for the bill_id entered as part of req.body
+            const [billForNotification] = Bills.findById(bill_id);
   
-            // Create notification for invite           
-            Users.findById(billForNotification.user_id)
-            .then(activeUser => {
-              notifUser = activeUser;
-            })      
+            // Create notification for invite
+            const [activeUser] = Users.findById(billForNotification.user_id);          
   
             try {        
               goSend.twilioNotification(
               notification.email,
-              notifUser.firstName,
-              notifUser.lastName,
-              notifBill.split_each_amount,
-              notifBill.description,
-              notifBill.created_at
+              activeUser.firstName,
+              activeUser.lastName,
+              billForNotification.split_each_amount,
+              billForNotification.description,
+              billForNotification.created_at
               );
   
              }catch(error){
@@ -119,7 +134,7 @@ router.post(
         }//end else  
   
         
-      })
+      })*/
             
       res.status(201).json(
         addedNotifications
