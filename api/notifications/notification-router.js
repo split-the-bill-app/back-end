@@ -66,9 +66,9 @@ router.post(
         message: 'The notification(s) have been successfully persisted.',
       });*/
 
-      if(createdNotification.length > 0){
+      if(createdNotification){
 
-        createdNotification.forEach(email => {
+        createdNotification.forEach(emailIn => {
 
           //find bill for the bill_id entered as part of req.body
           const [billForNotification] = Bills.findById(bill_id);
@@ -90,7 +90,7 @@ router.post(
           try {
         
             goSend.twilioNotification(
-            email,
+            emailIn,
             activeUser.firstName,
             activeUser.lastName,
             billForNotification.split_each_amount,
