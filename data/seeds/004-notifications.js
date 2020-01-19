@@ -5,11 +5,11 @@ exports.seed = function(knex) {
       return knex('notifications').insert([
         {
           bill_id: 1,
-          email: 'maryjane@yahoo.com',
+          email: 'tishayann@gmail.com',
         },
         {
           bill_id: 2,
-          email: 'johndoe@yahoo.com',
+          email: 'tishay_ann@yahoo.com',
         }
       ]);
     });

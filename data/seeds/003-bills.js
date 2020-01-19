@@ -9,13 +9,13 @@ exports.seed = function(knex) {
           user_id: 1,
           split_sum: 15.73,
           split_people_count: 3,          
-          created_at: moment().format('MMMM Do YYYY, h:mm:ss a'),
+          created_at: moment().format('MM-DD-YY'),
         },
         {
           user_id: 2,
           split_sum: 33.35,
           split_people_count: 2,
-          created_at: moment().format('MMMM Do YYYY, h:mm:ss a'),
+          created_at: moment().format('MM-DD-YY'),
         }        
       ]);
     });
