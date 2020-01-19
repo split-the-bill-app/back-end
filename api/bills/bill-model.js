@@ -44,7 +44,8 @@ function findUserBillNotifications(email) {
     .join('bills as b', 'b.id', 'n.bill_id') //bill the notification is for
     .join('users as u', 'u.id', 'b.user_id') //person that the bill is owed to
     .select('u.firstname', 'u.lastname', 'u.email', 'b.created_at', 'b.split_each_amount', 'b.description', 'n.paid')    
-    .where('n.email', email);   
+    .where('n.paid', 'false')
+    .andWhere('n.email', email);   
     
 }
 

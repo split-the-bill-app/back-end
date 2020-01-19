@@ -15,7 +15,8 @@ exports.up = function(knex) {
         bills.string('created_at').defaultTo(knex.fn.now());
         bills.float('split_sum').notNullable();      
         bills.integer('split_people_count').notNullable();
-        bills.float('split_each_amount');     
+        bills.float('split_each_amount');   
+        bills.string('notes');  
         bills.string('description');
         bills.boolean('paid').defaultTo(false);
         bills
