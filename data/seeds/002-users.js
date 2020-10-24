@@ -6,16 +6,16 @@ exports.seed = function(knex) {
     .then(function() {
       return knex('users').insert([
         {
-          email: 'tishay_ann@yahoo.com',
+          email: 'koree.exton@intrees.org',
           password: bcrypt.hashSync('test', 10),
-          firstname: 'Tishay',
-          lastname: 'Ann',
+          firstname: 'Bill',
+          lastname: 'Ower',
         },
         {
-          email: 'tishayann@gmail.com',
+          email: 'mohan.eldar@intrees.org',
           password: bcrypt.hashSync('test', 10),
-          firstname: 'Jazlene',
-          lastname: 'Arianna',
+          firstname: 'Bill',
+          lastname: 'Payer',
         }        
       ]);
     });

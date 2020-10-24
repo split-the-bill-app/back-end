@@ -1,3 +1,5 @@
+const moment = require("moment");
+
 const Users = require('../users/user-model.js');
 const Bills = require('../bills/bill-model.js');
 const Notifications = require('../notifications/notification-model.js');
@@ -9,7 +11,19 @@ module.exports = {
   validateBillId,
   validateNotification,
   validateNotificationId,
-  validateEmail
+  validateEmail,
+  validateRegisterEmail,
+  validateDateFormat
+};
+
+function validateDateFormat(req, res, next){
+  const {date} = req.params;
+  var validDate = moment(date, "MM-DD-YY", true).isValid();
+  if(validDate){
+      next();
+  }else{
+      res.status(400).json( {message: "Invalid date format. Required Format: MM-DD-YY"} );
+  }
 };
 
 function validateUser(req, res, next) {
@@ -29,6 +43,27 @@ function validateUser(req, res, next) {
     next();
   }
 }
+
+async function validateRegisterEmail(req, res, next) {
+  try {
+    const {
+      params: { email },
+    } = req;
+
+    const user = await Users.findByEmail(email);
+    user
+      ? res.status(409).json({
+        info: `${email} is associated with an existing account.`,
+      })
+      : 
+      ((req.user = user), next())
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: 'A server error occurred during duplicate email check.' });
+  }
+}
+
 
 async function validateEmail(req, res, next) {
   try {

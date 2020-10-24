@@ -14,5 +14,4 @@ exports.twilioNotification = (email, activeUserFirstName, activeUserLastName, sp
       html: `You owe <strong style="color:#5557FE;">&nbsp;${activeUserFirstName} ${activeUserLastName}&nbsp;</strong> $${split_each_amount} for ${description} on ${created_at}.`
     };
     sgMail.send(msg);
-
 };

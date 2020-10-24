@@ -5,6 +5,8 @@ module.exports = {
   findById,
   findBy,
   findUserBills,
+  findUserBillsByDate,
+  findUserBillsByTextEntry, 
   findByUserEmail,
   add,
   update,
@@ -44,6 +46,44 @@ function findUserBills(userId) {
       'u.email as user_email',
     )
     .where('b.user_id', userId);
+}
+
+function findUserBillsByDate(userId, date){
+  return db('bills as b')
+  .join('users as u', 'u.id', 'b.user_id')
+  .select(
+    'b.id',
+    'b.split_sum',
+    'b.split_people_count',
+    'b.split_each_amount',
+    'b.notes',
+    'b.description',
+    'b.created_at',
+    'b.user_id',
+    'u.email as user_email'
+  )  
+  .where('b.user_id', userId)
+  .where('b.created_at', date)  
+  .orderBy('b.created_at')
+}
+
+function findUserBillsByTextEntry(userId, search_text){
+  return db('bills as b')
+  .join('users as u', 'u.id', 'b.user_id')
+  .select(
+    'b.id',
+    'b.split_sum',
+    'b.split_people_count',
+    'b.split_each_amount',
+    'b.notes',
+    'b.description',
+    'b.created_at',
+    'b.user_id',
+    'u.email as user_email'
+  )  
+  .where('b.user_id', userId)   
+  .where('b.description', 'like', `%{search_text}%`)
+  .orderBy('b.created_at')
 }
 
 function findByUserEmail(user_email) {

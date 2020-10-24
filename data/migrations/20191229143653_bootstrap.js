@@ -13,7 +13,7 @@ exports.up = function(knex) {
       .createTable('bills', function(bills) {
         bills.increments();
         bills.string('created_at').defaultTo(knex.fn.now());
-        bills.float('split_sum').notNullable();      
+        bills.float('split_sum').notNullable(); //bill total      
         bills.integer('split_people_count').notNullable();
         bills.float('split_each_amount');   
         bills.string('notes');  

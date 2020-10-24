@@ -9,7 +9,7 @@ const NotificationsRouter = require('./api/notifications/notification-router.js'
 
 const server = express();
 
-server.use(Requestlogger);
+server.use(Requestlogger); //custom logging middleware for incoming requests
 server.use(express.json());
 server.use(helmet());
 server.use(cors());
@@ -24,7 +24,7 @@ server.use('/api/users', UsersRouter);
 server.use('/api/bills', BillsRouter);
 server.use('/api/notifications', NotificationsRouter);
 
-// Custom logging middleware for incoming requests
+//custom logging middleware for incoming requests
 function Requestlogger(req, res, next) {
   console.log(
     `${req.method} to http://localhost/5000${req.path} at `,

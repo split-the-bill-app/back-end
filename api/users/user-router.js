@@ -11,7 +11,7 @@ const router = express.Router();
 const AuthMiddleware = require('../middleware/auth-middleware.js');
 const ValidateMiddleware = require('../middleware/validate-middleware.js');
 
-// GET ALL USERS
+//GET ALL USERS
 router.get('/', AuthMiddleware.restricted, async (req, res) => {
   Users.find()
     .then(users => {
@@ -28,7 +28,7 @@ router.get('/', AuthMiddleware.restricted, async (req, res) => {
     );
 });
 
-// GET A USER BY ID
+//GET A USER BY ID
 router.get(
   '/:id',
   AuthMiddleware.restricted,
@@ -59,8 +59,8 @@ router.get(
   },
 );
 
-// ADD A NEW USER
-router.post('/register', (req, res) => {
+//ADD A NEW USER
+router.post('/register', ValidateMiddleware.validateRegisterEmail, (req, res) => {
   let { email, password, firstname, lastname } = req.body;
 
   if (email && password && firstname && lastname) {
@@ -88,7 +88,7 @@ router.post('/register', (req, res) => {
   }
 });
 
-// LOGIN A USER
+//LOGIN A USER
 router.post('/login', (req, res) => {
   let { email, password } = req.body;
 
@@ -108,7 +108,7 @@ router.post('/login', (req, res) => {
         });
       } else {
         res.status(401).json({
-          warning: 'Invalid credentials submitted for the login of an user.',
+          warning: 'Invalid login credentials.',
         });
       }
     })
@@ -148,7 +148,7 @@ router.delete(
   },
 ); */
 
-// UPDATE A USER
+//UPDATE A USER
 router.put(
   '/:id',
   AuthMiddleware.restricted,
@@ -188,7 +188,7 @@ router.put(
   },
 );
 
-// GET ALL BILLS BY A USER ID
+//GET ALL BILLS BY A USER ID
 router.get(
   '/:id/bills',
   AuthMiddleware.restricted,
@@ -219,7 +219,75 @@ router.get(
   },
 );
 
-// UTILITY FUNCTIONS
+//GET ALL BILLS BY USER ID AND DATE
+router.get(
+  '/:id/bills/searchdate/:date',
+  AuthMiddleware.restricted,
+  ValidateMiddleware.validateUserId,
+  ValidateMiddleware.validateDateFormat,
+  async (req, res) => {
+    const {
+      user: { id },      
+    } = req;
+
+    const date = req.params.date;
+
+    try {
+      const userBills = await Users.findUserBillsByDate(id, date);
+      if (userBills && userBills.length) {
+        res.status(200).json(userBills);
+      } else {
+        res.status(404).json({
+          info: 'No bills were found for that date.',
+        });
+      }
+    } catch (error) {
+      const {
+        user: { id },
+      } = req;
+
+      res.status(500).json({
+        error: 'A server error occurred while retrieving the bills for that date.',
+      });
+    }
+  },
+);
+
+//GET ALL BILLS BY USER ID AND SEARCH TEXT
+router.get(
+  '/:id/bills/searchtext/:searchtext',
+  AuthMiddleware.restricted,
+  ValidateMiddleware.validateUserId,
+  async (req, res) => {
+    const {
+      user: { id },
+    } = req;
+
+    const searchtext = req.params.searchtext;
+
+    try {
+      const userBills = await Users.findUserBillsByTextEntry(id, searchtext);
+      if (userBills && userBills.length) {
+        res.status(200).json(userBills);
+      } else {
+        res.status(404).json({
+          info: 'No bills were found matching that description.',
+        });
+      }
+    } catch (error) {
+      const {
+        user: { id },
+      } = req;
+
+      res.status(500).json({
+        error: 'A server error occurred retrieving the bills for that search.',
+      });
+    }
+  },
+);
+
+
+//UTILITY FUNCTIONS
 function usersWithoutPassword(users) {
   return users.map(user => ({
     id: user.id,

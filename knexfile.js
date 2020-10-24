@@ -22,7 +22,7 @@ module.exports = {
   },
   production: {
     client: 'pg',
-    connection: process.env.DATABASE_URL,
+    connection: process.env.DATABASE_URL, //env variable on heroku
     useNullAsDefault: true,
     migrations: {
       directory: './data/migrations',

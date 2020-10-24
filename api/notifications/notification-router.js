@@ -11,7 +11,7 @@ const router = express.Router();
 const AuthMiddleware = require('../middleware/auth-middleware.js');
 const ValidateMiddleware = require('../middleware/validate-middleware.js');
 
-// GET ALL NOTIFICATIONS
+//GET ALL NOTIFICATIONS
 router.get('/', AuthMiddleware.restricted, async (req, res) => {
   Notification.find()
     .then(notifications => {
@@ -28,7 +28,7 @@ router.get('/', AuthMiddleware.restricted, async (req, res) => {
     );
 });
 
-// ADD A NEW NOTIFICATION ARRAY OF EMAILS
+//ADD A NEW NOTIFICATION ARRAY OF EMAILS
 router.post(
   '/', 
   AuthMiddleware.restricted,
@@ -46,6 +46,7 @@ router.post(
       Array.isArray(email)
       ){      
 
+      //first we create and add the notifications to the database
       await email.forEach(email => {
            Notification.add({ bill_id, email })
           .then(newNotification => {
@@ -60,7 +61,6 @@ router.post(
       res.status(201).json({
         message: 'The notification(s) have been successfully persisted.',
       });     
-     
 
     } else {
       res.status(400).json({
@@ -71,12 +71,14 @@ router.post(
     }//end else  
     
     //find bill for the bill_id entered as part of req.body
+    //notifications are sent for one bill at a time
     const billForNotification = await Bills.findById(bill_id);
 
-    // Create notification for invite
+    // Create twilio notification
     const activeUser = await Users.findById(billForNotification.user_id);
 
-
+      //find notifications for the bill id
+      //and send a twilio notification for each of them
       await Bills.findBillNotifications(bill_id)
       .then(billNotifications => {
          billNotifications.forEach(notification => {
@@ -89,7 +91,6 @@ router.post(
             notification.description,
             notification.created_at
             );
-
         })
       })
       .catch(err => {
@@ -112,7 +113,7 @@ router.post(
 );//end router.post
 
 
-// UPDATE A NOTIFICATION
+//UPDATE A NOTIFICATION
 router.put(
   '/:id',
   AuthMiddleware.restricted,  
@@ -149,7 +150,7 @@ router.put(
   },
 );
 
-// DELETE A NOTIFICATION
+//DELETE A NOTIFICATION
 router.delete(
   '/:id',
   AuthMiddleware.restricted,  

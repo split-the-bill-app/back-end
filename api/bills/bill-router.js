@@ -9,7 +9,7 @@ const router = express.Router();
 const AuthMiddleware = require('../middleware/auth-middleware.js');
 const ValidateMiddleware = require('../middleware/validate-middleware.js');
 
-// GET ALL BILLS
+//GET ALL BILLS
 router.get('/', AuthMiddleware.restricted, async (req, res) => {
   Bills.find()
     .then(bills => {
@@ -26,7 +26,7 @@ router.get('/', AuthMiddleware.restricted, async (req, res) => {
     );
 });
 
-// GET A BILL BY ID
+//GET A BILL BY ID
 router.get(
   '/:id',
   AuthMiddleware.restricted,
@@ -52,7 +52,7 @@ router.get(
   },
 );
 
-// ADD A NEW BILL
+//ADD A NEW BILL
 router.post(
   '/',
   AuthMiddleware.restricted,
@@ -95,7 +95,7 @@ router.post(
   },
 );
 
-// DELETE A BILL
+//DELETE A BILL
 router.delete(
   '/:id',
   AuthMiddleware.restricted,
@@ -123,7 +123,7 @@ router.delete(
   },
 );
 
-// UPDATE A BILL
+//UPDATE A BILL
 router.put(
   '/:id',
   AuthMiddleware.restricted,
@@ -161,7 +161,7 @@ router.put(
   },
 );
 
-// GET ALL NOTIFICATIONS BY A BILL ID
+//GET ALL NOTIFICATIONS BY A BILL ID
 router.get(
   '/:id/notifications',
   AuthMiddleware.restricted,
@@ -254,7 +254,7 @@ router.get(
   },
 );
 
-//GET ALL PAID BILLS/NOTIFICATIONS FOR THE LOGGED IN USER
+//GET ALL PAID BILLS/NOTIFICATIONS FOR THE LOGGED IN USER (your friends paid what they owe you)
 router.get(
   '/notifications/paid/:id',
   AuthMiddleware.restricted,
@@ -285,9 +285,7 @@ router.get(
   },
 );
 
-
-
-// DELETE ALL NOTIFICATIONS BY BILL ID
+//DELETE ALL NOTIFICATIONS BY BILL ID
 router.delete(
   '/:id/notifications',
   AuthMiddleware.restricted,
