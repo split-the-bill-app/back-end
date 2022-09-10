@@ -17,7 +17,7 @@ server.use((req, res, next) => {
 server.use(Requestlogger); //custom logging middleware for incoming requests
 server.use(express.json());
 server.use(helmet());
-server.use(cors());
+//server.use(cors());
 
 server.get('/', (req, res) => {
   res.send(
