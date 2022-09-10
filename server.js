@@ -17,7 +17,7 @@ server.use(cors());
 server.get('/', (req, res) => {
   res.send(
     `Welcome to Split The Bill!`,
-  );  
+  );
 });
 
 server.use('/api/users', UsersRouter);
