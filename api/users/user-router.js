@@ -78,7 +78,7 @@ router.post('/register', ValidateMiddleware.validateRegisterEmail, (req, res) =>
       })
       .catch(error => {
         console.log('register error', error);
-        
+
         res.status(500).json({
           error: 'An error occurred during the creation of a new user.',
         });
@@ -92,6 +92,12 @@ router.post('/register', ValidateMiddleware.validateRegisterEmail, (req, res) =>
 
 //LOGIN A USER
 router.post('/login', (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*")
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Max-Age", "1800");
+  res.setHeader("Access-Control-Allow-Headers", "content-type");
+  res.setHeader( "Access-Control-Allow-Methods", "PUT, POST, GET, DELETE, PATCH, OPTIONS" ); 
+  
   let { email, password } = req.body;
 
   Users.findByUserEmail(email)
