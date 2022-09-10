@@ -9,15 +9,10 @@ const NotificationsRouter = require('./api/notifications/notification-router.js'
 
 const server = express();
 
-server.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  next();
-});
-
 server.use(Requestlogger); //custom logging middleware for incoming requests
 server.use(express.json());
 server.use(helmet());
-//server.use(cors());
+server.use(cors());
 
 server.get('/', (req, res) => {
   res.send(
