@@ -77,6 +77,8 @@ router.post('/register', ValidateMiddleware.validateRegisterEmail, (req, res) =>
         });
       })
       .catch(error => {
+        console.log('register error', error);
+        
         res.status(500).json({
           error: 'An error occurred during the creation of a new user.',
         });
