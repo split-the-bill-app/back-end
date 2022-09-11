@@ -12,7 +12,14 @@ const server = express();
 server.use(Requestlogger); //custom logging middleware for incoming requests
 server.use(express.json());
 server.use(helmet());
-server.use(cors());
+
+var corsOptions = {
+  origin: 'https://split-the-bill-main.netlify.app',
+  optionsSuccessStatus: 200, // For legacy browser support
+  methods: "GET, PUT, POST, DELETE"
+}
+
+server.use(cors(corsOptions));
 
 server.get('/', (req, res) => {
   res.send(
