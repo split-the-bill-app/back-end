@@ -93,16 +93,6 @@ router.post('/register', ValidateMiddleware.validateRegisterEmail, (req, res) =>
 //LOGIN A USER
 router.post('/login', (req, res) => {
   let { email, password } = req.body;
-
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-  );
   
   Users.findByUserEmail(email)
     .then(user => {
