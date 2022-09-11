@@ -12,14 +12,7 @@ const server = express();
 server.use(Requestlogger); //custom logging middleware for incoming requests
 server.use(express.json());
 server.use(helmet());
-
-var corsOptions = {
-  origin: '*',
-  optionsSuccessStatus: 200, // For legacy browser support
-  methods: "GET, PUT, POST, DELETE"
-}
-
-server.use(cors(corsOptions));
+server.use(cors());
 
 server.get('/', (req, res) => {
   res.send(
