@@ -103,8 +103,7 @@ router.post('/login', (req, res) => {
     "Access-Control-Allow-Methods",
     "GET, POST, PUT, DELETE, PATCH, OPTIONS"
   );
-  res.setHeader('content-type', 'application/json');
-
+  
   Users.findByUserEmail(email)
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
