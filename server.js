@@ -15,7 +15,7 @@ server.use(helmet());
 server.use(cors());
 
 server.get('/', (req, res) => {
-  es.send(
+  res.send(
     `Welcome to Split The Bill!`,
   );
 });
