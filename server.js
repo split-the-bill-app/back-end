@@ -14,7 +14,7 @@ server.use(express.json());
 server.use(helmet());
 
 var corsOptions = {
-  origin: 'https://sp split-the-bill-main.netlify.app',
+  origin: 'https://split-the-bill-main.netlify.app',
   optionsSuccessStatus: 200, // For legacy browser support
   methods: "GET, PUT, POST, DELETE"
 }
