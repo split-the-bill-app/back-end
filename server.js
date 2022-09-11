@@ -12,14 +12,7 @@ const server = express();
 server.use(Requestlogger); //custom logging middleware for incoming requests
 server.use(express.json());
 server.use(helmet());
-
-var corsOptions = {
-  origin: ['https://split-the-bill-main.netlify.app', 'localhost:3000'],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true
-}
-
-server.use(cors(corsOptions));
+server.use(cors());
 
 server.get('/', (req, res) => {
   res.send(
