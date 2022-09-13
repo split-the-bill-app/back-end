@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -68,35 +69,43 @@ router.post('/register', ValidateMiddleware.validateRegisterEmail, (req, res) =>
     password = hash;
 
     Users.add({ email, password, firstname, lastname })
-      .then(newUser => {
-        res.status(201).json({
-          id: newUser.id,
-          email: newUser.email,
-          firstname: newUser.firstname,
-          lastname: newUser.lastname,
-        });
+      .then(id => {
+        if(id){          
+          Users.findByUserEmail(email)
+          .then(newUser => {           
+            res.status(201).json({
+              id: newUser.id,
+              email: newUser.email,
+              firstname: newUser.firstname,
+              lastname: newUser.lastname,
+            });
+          })
+          .catch(error => {           
+              res.status(500).json({
+              errorMsg: 'A server error occurred during sign up.',
+            });
+          });
+        }       
       })
-      .catch(error => {
-        console.log('register error', error);
-
+      .catch(error => {       
         res.status(500).json({
-          error: 'An error occurred during the creation of a new user.',
+          errorMsg: 'A server error occurred during sign up.',
         });
       });
   } else {
     res.status(400).json({
-      warning: 'Not all information were provided to create a new user.',
+      errorMsg: 'Please provide all requested fields.',
     });
   }
 });
 
 //LOGIN A USER
-router.post('/login', (req, res) => {
+router.post('/login', (req, res) => {  
   let { email, password } = req.body;
   
   Users.findByUserEmail(email)
-    .then(user => {
-      if (user && bcrypt.compareSync(password, user.password)) {
+    .then(user => {      
+      if (user && bcrypt.compareSync(password, user.password)) {        
         const token = generateJWT(user);
         res.status(200).json({
           message: `The user ${user.email} successfully logged in!`,
@@ -108,17 +117,16 @@ router.post('/login', (req, res) => {
           },
           token: token,
         });
-      } else {
+      } else {       
         res.status(401).json({
-          warning: 'Invalid login credentials.',
+          errorMsg: 'Invalid login credentials.',
         });
       }
     })
-    .catch(error => {
+    .catch(error => {     
       res
         .status(500)
-        .json({ error: 'An error occurred during logging in a user.' });
-        console.log("login error", error);
+        .json({ errorMsg: 'Sorry, a server error occurred during login.' });        
     });
 });
 
@@ -156,8 +164,7 @@ router.put(
   AuthMiddleware.restricted,
   ValidateMiddleware.validateUser,
   ValidateMiddleware.validateUserId,
-  async (req, res) => {
-    console.log('middleware: ', req.user);
+  async (req, res) => {   
     try {
       const {
         body: { email, password, firstname, lastname },

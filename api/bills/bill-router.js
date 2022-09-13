@@ -233,8 +233,12 @@ router.get(
       params: { id },
     } = req;
 
+    console.log('id in get bill owed notifs --->', id);
+
     try {
       const userNotifications = await Bills.findUserOwedBills(id);
+      console.log('userNotifications in get bill owed notifs --->', userNotifications);
+
       if (userNotifications && userNotifications.length) {
         res.status(200).json(userNotifications);
       } else {
@@ -264,8 +268,12 @@ router.get(
       params: { id },
     } = req;
 
+    console.log('id in get bill paid notifs --->', id);
+
     try {
       const paidBills = await Bills.findAllPaidBills(id);
+      console.log('paidBills in get bill owed notifs --->', paidBills);
+
       if (paidBills && paidBills.length) {
         res.status(200).json(paidBills);
       } else {

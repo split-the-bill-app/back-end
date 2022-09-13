@@ -15,6 +15,8 @@ function find() {
 }
 
 function findById(id) {
+  console.log('notification id in findById', id);
+
   return db('notifications')
     .where('id', id)
     .first()
@@ -38,7 +40,8 @@ function findBy(filter) {
 function add(notification) {
   return db('notifications')
     .insert(notification, 'id')
-    .then(([id]) => this.findById(id));
+    //.then(([id]) => this.findById(id));
+    .then(([id]) => (id ? id : null));
 }
 
 function update(id, changes) {

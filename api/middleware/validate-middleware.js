@@ -37,7 +37,7 @@ function validateUser(req, res, next) {
   } else if (!email || !firstname || !lastname) {
     res.status(400).json({
       warning:
-        'Missing required email or firstname or lastname information for an user.',
+        'Missing required email, firstname or lastname for user.',
     });
   } else {
     next();
@@ -45,25 +45,22 @@ function validateUser(req, res, next) {
 }
 
 async function validateRegisterEmail(req, res, next) {
-  try {
-    const {
-      params: { email },
-    } = req;
-
-    const user = await Users.findByEmail(email);
+  try {   
+    const { email } = req.body;
+    
+    const user = await Users.findByUserEmail(email);
     user
       ? res.status(409).json({
-        info: `${email} is associated with an existing account.`,
+        errorMsg: `${email} is associated with an existing account.`,
       })
       : 
       ((req.user = user), next())
-  } catch (error) {
+  } catch (error) {   
     res
       .status(500)
-      .json({ error: 'A server error occurred during duplicate email check.' });
+      .json({ errorMsg: 'A server error occurred during duplicate email check.' });
   }
 }
-
 
 async function validateEmail(req, res, next) {
   try {

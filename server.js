@@ -14,7 +14,7 @@ server.use(express.json());
 server.use(helmet());
 server.use(cors());
 
-server.get('/', (req, res) => {
+server.get('/', (req, res) => { 
   res.send(
     `Welcome to Split The Bill!`,
   );
@@ -27,7 +27,7 @@ server.use('/api/notifications', NotificationsRouter);
 //custom logging middleware for incoming requests
 function Requestlogger(req, res, next) {
   console.log(
-    `${req.method} to http://localhost/5000${req.path} at `,
+    `${req.method} to ${req.path} at `,
     moment().format(),
   );
   next();

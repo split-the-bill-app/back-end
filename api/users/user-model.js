@@ -21,7 +21,7 @@ function findById(id) {
   return db('users')
     .where('id', id)
     .first()
-    .then(user => (user ? user : null));
+    .then(user => (user ? user : null));    
 }
 
 function findBy(filter) {
@@ -95,8 +95,8 @@ function findByUserEmail(user_email) {
 
 function add(user) {
   return db('users')
-    .insert(user, 'id')
-    .then(([id]) => this.findById(id));
+    .insert(user, 'id')    
+    .then(([id]) => (id ? id : null)); 
 }
 
 function update(id, changes) {

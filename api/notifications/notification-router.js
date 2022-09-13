@@ -23,7 +23,7 @@ router.get('/', AuthMiddleware.restricted, async (req, res) => {
     .catch(error =>
       res.status(500).json({
         error:
-          'An error occurred during fetching all notifications. That one is on us!',
+          'A server error occurred during notification(s) retrieval.',
       }),
     );
 });
@@ -48,18 +48,25 @@ router.post(
 
       //first we create and add the notifications to the database
       await email.forEach(email => {
-           Notification.add({ bill_id, email })
-          .then(newNotification => {
-            createdNotification.push({
-              id: newNotification.id,
-              bill_id: newNotification.bill_id,
-              email: newNotification.email,
-            });
+        Notification.add({ bill_id, email })        
+        .then(id => {
+          console.log('newNotification ID--->', id);
 
-          });
-      });
+            Notification.findByEmail(email)
+            .then(newNotification => {
+              console.log('newNotification --->', newNotification);
+
+              createdNotification.push({
+                id: newNotification.id,
+                bill_id: newNotification.bill_id,
+                email: newNotification.email,
+              });    
+            })        
+        });
+
+      });//end forEach
       res.status(201).json({
-        message: 'The notification(s) have been successfully persisted.',
+        message: 'The notification(s) have been successfully sent.',
       });     
 
     } else {
@@ -93,7 +100,9 @@ router.post(
             );
         })
       })
-      .catch(err => {
+      .catch(error => {
+        console.log('twilio send error 1 --->', error);
+
         res.status(500).json({
           error:
             'An error occurred while sending twilio notifications 1!'
@@ -102,11 +111,12 @@ router.post(
 
     }//end outer try
     catch(error){
+      console.log('twilio send error 2--->', error);
+
       res.status(500).json({
         error:
           'An error occurred while sending twilio notifications 2!'
       })
-
     }   
     
   }//end endpoint
