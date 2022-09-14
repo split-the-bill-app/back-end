@@ -81,7 +81,7 @@ function update(id, changes) {
     .update(changes);
 }
 
-function remove(id) {
+function remove(id) {  
   return db('bills')
     .where('id', id)
     .del();

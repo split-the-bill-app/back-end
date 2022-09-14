@@ -51,7 +51,7 @@ function update(id, changes) {
   })
 }
 
-function remove(id) {
+function remove(id) {  
   return db('notifications')
     .where('id', id)
     .del();

@@ -82,9 +82,9 @@ router.post(
             created_at: newBill.created_at,
           });
         })
-        .catch(error => {
+        .catch(error => {         
           res.status(500).json({
-            error: 'An error occurred during the creation of a new bill.',
+            error: 'An error occurred during adding a new bill.',
           });
         });
     } else {
@@ -106,18 +106,20 @@ router.delete(
         bill: { id },
       } = req;
 
-      const deletedBill = await Bills.remove(id);
+      //this returns the count or number of bills deleted
+      const deletedBillCount = await Bills.remove(id);      
 
       res.status(200).json({
-        message: `The bill with the id of ${id} was successfully deleted.`,
+        message: `Bill ${id} was successfully deleted.`,
       });
     } catch (error) {
+
       const {
         bill: { id },
       } = req;
 
       res.status(500).json({
-        message: `An error occurred during deletion of a bill with the id ${id}.`,
+        message: `An error occurred while deleting bill ${id}.`,
       });
     }
   },
@@ -313,12 +315,12 @@ router.delete(
               res
                 .status(500)
                 .json(
-                  'An error occurred during deleting some of the notifications for the bill.',
+                  'An error occurred while deleting notifications for the bill.',
                 );
             });
         });
         res.status(200).json({
-          message: `The notification(s) for the bill with the id of ${id} were successfully deleted.`,
+          message: `The notification(s) for bill ${id} were successfully deleted.`,
         });
       } else {
         res.status(404).json({
@@ -330,7 +332,7 @@ router.delete(
         bill: { id },
       } = req;      
       res.status(500).json({
-        message: `An error occurred during the deletion for notifications for the bill with the id ${id}.`,
+        message: `An error occurred while deleting notifications for bill ${id}.`,
       });
     }
   },

@@ -138,13 +138,11 @@ router.put(
         : res.status(500).json({
             error: `An error occurred within the database and the notification could not be updated.`
           }          
-        );
-
-         
-    } catch (error) {
-      res.status(500).json({
-        error: `An error occurred within the database and the notification could not be updated.`        
-      });     
+        );         
+    }catch (error) {
+        res.status(500).json({
+          error: `An error occurred within the database and the notification could not be updated.`        
+        });     
     }
   },
 );
@@ -162,7 +160,7 @@ router.delete(
       const deletedNotification = await Notification.remove(id);
 
       res.status(200).json({
-        message: `The notification with id ${id} was successfully deleted.`,
+        message: `Notification ${id} was successfully deleted.`,
       });
     } catch (error) {
       const {
@@ -170,7 +168,7 @@ router.delete(
       } = req;
 
       res.status(500).json({
-        message: `An error occurred during deletion of the notification with id ${id}.`,
+        message: `An error occurred and notification ${id} was not deleted.`,
       });
     }
   },
