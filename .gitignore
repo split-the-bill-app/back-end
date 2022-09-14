@@ -60,4 +60,6 @@ typings/
 # Mac files
 .DS_Store
 
-data/splitthebill.db3
+data/splitthebill.db3sendgrid.env
+sendgrid.env source ./sendgrid.env
+sendgrid.env

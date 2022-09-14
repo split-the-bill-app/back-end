@@ -204,6 +204,7 @@ router.get(
 
     try {
       const userNotifications = await Bills.findUserBillNotifications(email);
+
       if (userNotifications && userNotifications.length) {
         res.status(200).json(userNotifications);
       } else {
@@ -215,7 +216,7 @@ router.get(
       const {
         params: { email },
       } = req;
-      console.log("get all notification sent to email error", error);
+
       res.status(500).json({
         error: `A server error occurred while retrieving the notifications for ${email}.`,
       });
@@ -231,17 +232,14 @@ router.get(
   async (req, res) => {
     const {
       params: { id },
-    } = req;
-
-    console.log('id in get bill owed notifs --->', id);
+    } = req;   
 
     try {
-      const userNotifications = await Bills.findUserOwedBills(id);
-      console.log('userNotifications in get bill owed notifs --->', userNotifications);
+      const userNotifications = await Bills.findUserOwedBills(id);      
 
       if (userNotifications && userNotifications.length) {
         res.status(200).json(userNotifications);
-      } else {
+      } else {       
         res.status(404).json({
           info: `No bills owed to user ${id} was found.`,
         });
@@ -249,8 +247,8 @@ router.get(
     } catch (error) {
       const {
         params: { id },
-      } = req;
-      console.log("get all bills owed to a user error", error);
+      } = req;     
+
       res.status(500).json({
         error: `A server error occurred while retrieving bills owed to ${id}.`,
       });
@@ -268,11 +266,8 @@ router.get(
       params: { id },
     } = req;
 
-    console.log('id in get bill paid notifs --->', id);
-
     try {
-      const paidBills = await Bills.findAllPaidBills(id);
-      console.log('paidBills in get bill owed notifs --->', paidBills);
+      const paidBills = await Bills.findAllPaidBills(id);     
 
       if (paidBills && paidBills.length) {
         res.status(200).json(paidBills);
@@ -284,8 +279,8 @@ router.get(
     } catch (error) {
       const {
         params: { id },
-      } = req;
-      console.log("get all paid bills owed to a user error", error);
+      } = req;      
+
       res.status(500).json({
         error: `A server error occurred while retrieving paid bills owed to ${id}.`,
       });
@@ -311,7 +306,7 @@ router.delete(
           Notification.remove(notification.id)
             .then(newNotification =>
               console.log(
-                'deleted a notification successfully ' + newNotification,
+                'notification successfully deleted: ' + newNotification,
               ),
             )
             .catch(error => {
@@ -333,8 +328,7 @@ router.delete(
     } catch (error) {
       const {
         bill: { id },
-      } = req;
-      console.log(error);
+      } = req;      
       res.status(500).json({
         message: `An error occurred during the deletion for notifications for the bill with the id ${id}.`,
       });

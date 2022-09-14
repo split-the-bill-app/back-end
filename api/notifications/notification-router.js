@@ -50,12 +50,8 @@ router.post(
       await email.forEach(email => {
         Notification.add({ bill_id, email })        
         .then(id => {
-          console.log('newNotification ID--->', id);
-
             Notification.findByEmail(email)
-            .then(newNotification => {
-              console.log('newNotification --->', newNotification);
-
+            .then(newNotification => {             
               createdNotification.push({
                 id: newNotification.id,
                 bill_id: newNotification.bill_id,
@@ -100,9 +96,7 @@ router.post(
             );
         })
       })
-      .catch(error => {
-        console.log('twilio send error 1 --->', error);
-
+      .catch(error => {       
         res.status(500).json({
           error:
             'An error occurred while sending twilio notifications 1!'
@@ -111,8 +105,6 @@ router.post(
 
     }//end outer try
     catch(error){
-      console.log('twilio send error 2--->', error);
-
       res.status(500).json({
         error:
           'An error occurred while sending twilio notifications 2!'
@@ -145,17 +137,14 @@ router.put(
           res.status(200).json(successFlag)
         : res.status(500).json({
             error: `An error occurred within the database and the notification could not be updated.`
-          },
-          console.log("update error 1", error)
-          );
+          }          
+        );
 
          
     } catch (error) {
       res.status(500).json({
         error: `An error occurred within the database and the notification could not be updated.`        
-      });
-
-      console.log("update error 2", error)
+      });     
     }
   },
 );

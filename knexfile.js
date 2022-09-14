@@ -19,7 +19,7 @@ module.exports = {
         conn.run('PRAGMA foreign_keys = ON', done);
       },
     },
-  },
+  },  
   production: {
     client: 'pg',
     connection: process.env.DATABASE_URL, //env variable on heroku    
@@ -31,6 +31,5 @@ module.exports = {
     seeds: {
       directory: './data/seeds',
     },
-  } 
-
+  }
 };

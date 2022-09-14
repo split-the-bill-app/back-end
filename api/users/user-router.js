@@ -104,7 +104,7 @@ router.post('/login', (req, res) => {
   let { email, password } = req.body;
   
   Users.findByUserEmail(email)
-    .then(user => {      
+    .then(user => {          
       if (user && bcrypt.compareSync(password, user.password)) {        
         const token = generateJWT(user);
         res.status(200).json({
@@ -123,7 +123,7 @@ router.post('/login', (req, res) => {
         });
       }
     })
-    .catch(error => {     
+    .catch(error => {           
       res
         .status(500)
         .json({ errorMsg: 'Sorry, a server error occurred during login.' });        
@@ -150,7 +150,7 @@ router.delete(
       const {
         user: { id },
       } = req;
-      console.log(error);
+
       res.status(500).json({
         message: `The user with the id of ${id} could not be deleted.`,
       });

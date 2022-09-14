@@ -15,8 +15,6 @@ function find() {
 }
 
 function findById(id) {
-  console.log('notification id in findById', id);
-
   return db('notifications')
     .where('id', id)
     .first()
