@@ -49,13 +49,15 @@ router.post(
       //first we create and add the notifications to the database
       await email.forEach(email => {
         Notification.add({ bill_id, email })        
-        .then(id => {
+        .then(id => {//returns an object with the id ---> { id: 9 } 
           if(id){
-            Notification.findById(id)   
+            console.log('notification id line 54--->', id.id);
+            Notification.findById(id.id)   
             //this might return null even if the notification is created
             //the front end makes a call to get all notifications for a bill by id so the front end is successfully updated  
             //adding a catch block results in a 500 error and might result in server disconnecting       
-            .then(newNotification => {              
+            .then(newNotification => {         
+              console.log('new notification --->', newNotification);     
               if(newNotification){                
                   createdNotification.push({
                     id: newNotification.id,
@@ -173,6 +175,7 @@ router.delete(
       } = req;
 
       //this returns the count or number of notifications deleted
+      console.log('deleted notification id--->', id);
       const deletedNotificationCount = await Notification.remove(id);
       console.log('deleted notification count--->', deletedNotificationCount);
 

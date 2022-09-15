@@ -72,7 +72,8 @@ router.post(
       })        
       .then(id => {
         if(id){
-          Bills.findById(id)
+          console.log('bill id line 75--->', id.id);
+          Bills.findById(id.id)
           //this might return null even if the bill is created
           //the front end makes a call to get all bills for a user so the front end is successfully updated  
           //adding a catch block results in a 500 error and might result in server disconnecting 
@@ -120,6 +121,7 @@ router.delete(
       } = req;
 
       //this returns the count or number of bills deleted
+      console.log('deleted bill id--->', id);
       const deletedBillCount = await Bills.remove(id);   
       console.log('no. of bills successfully deleted--->', deletedBillCount);   
 
@@ -316,13 +318,14 @@ router.delete(
         bill: { id },
       } = req;
 
+      console.log('bill id for notifications to be deleted--->', id);
       const billNotifications = await Bills.findBillNotifications(id);
       console.log('bill notifications to be deleted--->', billNotifications);
 
       if (billNotifications && billNotifications.length) {
         billNotifications.forEach(notification => {
           Notification.remove(notification.id)
-            .then(newNotification =>
+            .then(newNotification => //this returns the count or number of notifications deleted
               console.log(
                 'notification successfully deleted: ' + newNotification,
               ),

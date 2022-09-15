@@ -69,8 +69,8 @@ router.post('/register', ValidateMiddleware.validateRegisterEmail, (req, res) =>
     password = hash;
 
     Users.add({ email, password, firstname, lastname })
-      .then(id => {        
-        if(id){          
+      .then(id => {//returns an object with the id ---> { id: 9 } <--- syntax id.id to retrieve actual id   
+        if(id){               
           Users.findByUserEmail(email)
           .then(newUser => {                      
             res.status(201).json({
