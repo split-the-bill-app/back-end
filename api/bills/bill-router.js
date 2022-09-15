@@ -71,15 +71,13 @@ router.post(
         created_at: moment().format('MM-DD-YY'),
       })        
       .then(id => {
-        if(id){
-          console.log('bill id line 75--->', id.id);
+        if(id){        
           Bills.findById(id.id)
           //this might return null even if the bill is created
           //the front end makes a call to get all bills for a user so the front end is successfully updated  
           //adding a catch block results in a 500 error and might result in server disconnecting 
           .then(newBill => {
-            if(newBill){
-              console.log('if new bill 82--->', newBill);
+            if(newBill){             
               res.status(201).json({
                 id: newBill.id,
                 user_id: newBill.user_id,
@@ -325,9 +323,9 @@ router.delete(
       if (billNotifications && billNotifications.length) {
         billNotifications.forEach(notification => {
           Notification.remove(notification.id)
-            .then(newNotification => //this returns the count or number of notifications deleted
+            .then(newNotificationCount => //this returns the count or number of notifications deleted
               console.log(
-                'notification successfully deleted: ' + newNotification,
+                'notification successfully deleted: ' + newNotificationCount,
               ),
             )
             .catch(error => {

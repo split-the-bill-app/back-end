@@ -51,13 +51,11 @@ router.post(
         Notification.add({ bill_id, email })        
         .then(id => {//returns an object with the id ---> { id: 9 } 
           if(id){
-            console.log('notification id line 54--->', id.id);
             Notification.findById(id.id)   
             //this might return null even if the notification is created
             //the front end makes a call to get all notifications for a bill by id so the front end is successfully updated  
             //adding a catch block results in a 500 error and might result in server disconnecting       
             .then(newNotification => {         
-              console.log('new notification --->', newNotification);     
               if(newNotification){                
                   createdNotification.push({
                     id: newNotification.id,
@@ -70,8 +68,7 @@ router.post(
             console.log('No id returned after adding a new notification.');
           }                     
         })
-        .catch(error => {   
-          console.log('notification add error 72 --->', error);      
+        .catch(error => {     
           res.status(500).json({
             error: 'An error occurred while sending the notification.',
           });

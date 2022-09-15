@@ -15,8 +15,6 @@ function find() {
 }
 
 function findById(id) {
-  console.log('notifications find by id --->', id);
-
   return db('notifications')
     .where('id', id)
     .first()
@@ -31,8 +29,6 @@ function findByEmail(email) {
 }
 
 function findBy(filter) {
-  console.log('notifications filter --->', filter);
-
   return db('notifications')
     .where(filter)
     .first()
