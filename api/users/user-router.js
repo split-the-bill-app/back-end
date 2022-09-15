@@ -64,15 +64,15 @@ router.get(
 router.post('/register', ValidateMiddleware.validateRegisterEmail, (req, res) => {
   let { email, password, firstname, lastname } = req.body;
 
-  if (email && password && firstname && lastname) {
+  if (email && password && firstname && lastname) {    
     const hash = bcrypt.hashSync(password, 12);
     password = hash;
 
     Users.add({ email, password, firstname, lastname })
-      .then(id => {
+      .then(id => {        
         if(id){          
           Users.findByUserEmail(email)
-          .then(newUser => {           
+          .then(newUser => {                      
             res.status(201).json({
               id: newUser.id,
               email: newUser.email,
@@ -80,14 +80,16 @@ router.post('/register', ValidateMiddleware.validateRegisterEmail, (req, res) =>
               lastname: newUser.lastname,
             });
           })
-          .catch(error => {           
+          .catch(error => {                      
               res.status(500).json({
               errorMsg: 'A server error occurred during sign up.',
             });
           });
-        }       
+        }else{
+          console.log('No id returned after adding new user.');
+        }      
       })
-      .catch(error => {       
+      .catch(error => {             
         res.status(500).json({
           errorMsg: 'A server error occurred during sign up.',
         });
@@ -104,7 +106,7 @@ router.post('/login', (req, res) => {
   let { email, password } = req.body;
   
   Users.findByUserEmail(email)
-    .then(user => {          
+    .then(user => {               
       if (user && bcrypt.compareSync(password, user.password)) {        
         const token = generateJWT(user);
         res.status(200).json({

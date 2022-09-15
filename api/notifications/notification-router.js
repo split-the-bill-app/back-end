@@ -50,19 +50,34 @@ router.post(
       await email.forEach(email => {
         Notification.add({ bill_id, email })        
         .then(id => {
-            Notification.findByEmail(email)
-            .then(newNotification => {             
-              createdNotification.push({
-                id: newNotification.id,
-                bill_id: newNotification.bill_id,
-                email: newNotification.email,
-              });    
-            })        
+          if(id){
+            Notification.findById(id)   
+            //this might return null even if the notification is created
+            //the front end makes a call to get all notifications for a bill by id so the front end is successfully updated  
+            //adding a catch block results in a 500 error and might result in server disconnecting       
+            .then(newNotification => {              
+              if(newNotification){                
+                  createdNotification.push({
+                    id: newNotification.id,
+                    bill_id: newNotification.bill_id,
+                    email: newNotification.email,
+                  });   
+              }            
+            })
+          }else{
+            console.log('No id returned after adding a new notification.');
+          }                     
+        })
+        .catch(error => {   
+          console.log('notification add error 72 --->', error);      
+          res.status(500).json({
+            error: 'An error occurred while sending the notification.',
+          });
         });
 
       });//end forEach
       res.status(201).json({
-        message: 'The notification(s) have been successfully sent.',
+        message: 'Notification(s) sent successfully.',
       });     
 
     } else {
@@ -157,18 +172,22 @@ router.delete(
         params: { id },
       } = req;
 
-      const deletedNotification = await Notification.remove(id);
+      //this returns the count or number of notifications deleted
+      const deletedNotificationCount = await Notification.remove(id);
+      console.log('deleted notification count--->', deletedNotificationCount);
 
       res.status(200).json({
         message: `Notification ${id} was successfully deleted.`,
       });
     } catch (error) {
+      console.log('deleted notification error--->', error);
+
       const {
         params: { id },
       } = req;
 
       res.status(500).json({
-        message: `An error occurred and notification ${id} was not deleted.`,
+        message: `A server error prevented notification ${id} from being deleted.`,
       });
     }
   },

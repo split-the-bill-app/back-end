@@ -69,24 +69,37 @@ router.post(
         description,
         user_id,
         created_at: moment().format('MM-DD-YY'),
+      })        
+      .then(id => {
+        if(id){
+          Bills.findById(id)
+          //this might return null even if the bill is created
+          //the front end makes a call to get all bills for a user so the front end is successfully updated  
+          //adding a catch block results in a 500 error and might result in server disconnecting 
+          .then(newBill => {
+            if(newBill){
+              console.log('if new bill 82--->', newBill);
+              res.status(201).json({
+                id: newBill.id,
+                user_id: newBill.user_id,
+                split_sum: newBill.split_sum,
+                split_people_count: newBill.split_people_count,
+                split_each_amount: newBill.split_each_amount,
+                notes: newBill.notes,
+                description: newBill.description,
+                created_at: newBill.created_at,
+              });            
+            }  
+          })
+        }else{
+          console.log('No id returned after adding new bill.');
+        }      
       })
-        .then(newBill => {
-          res.status(201).json({
-            id: newBill.id,
-            user_id: newBill.user_id,
-            split_sum: newBill.split_sum,
-            split_people_count: newBill.split_people_count,
-            split_each_amount: newBill.split_each_amount,
-            notes: newBill.notes,
-            description: newBill.description,
-            created_at: newBill.created_at,
-          });
-        })
-        .catch(error => {         
-          res.status(500).json({
-            error: 'An error occurred during adding a new bill.',
-          });
+      .catch(error => {         
+        res.status(500).json({
+          error: 'An error occurred while adding a new bill.',
         });
+      });        
     } else {
       res.status(400).json({
         warning: 'Not all information were provided to create a new bill.',
@@ -107,19 +120,21 @@ router.delete(
       } = req;
 
       //this returns the count or number of bills deleted
-      const deletedBillCount = await Bills.remove(id);      
+      const deletedBillCount = await Bills.remove(id);   
+      console.log('no. of bills successfully deleted--->', deletedBillCount);   
 
       res.status(200).json({
         message: `Bill ${id} was successfully deleted.`,
       });
     } catch (error) {
+      console.log('delete bill error--->', error);
 
       const {
         bill: { id },
       } = req;
 
       res.status(500).json({
-        message: `An error occurred while deleting bill ${id}.`,
+        message: `A server error prevented bill no. ${id} from being deleted.`,
       });
     }
   },
@@ -150,14 +165,14 @@ router.put(
 
       return successFlag > 0
         ? res.status(200).json({
-            message: `The bill with the id ${id} has been successfully updated!`,
+            message: `Bill ${id} was successfully updated!`,
           })
         : res.status(500).json({
-            error: `An error occurred within the database thus the bill with the id ${id} could not be updated.`,
+            error: `A server error prevented bill ${id} from being updated.`,
           });
     } catch (error) {
       res.status(500).json({
-        error: `An error occurred during updating the bill with the id ${id}.`,
+        error: `An error occurred while updating bill ${id}.`,
       });
     }
   },
@@ -179,7 +194,7 @@ router.get(
         res.status(200).json(userBills);
       } else {
         res.status(404).json({
-          info: `No bills available for the user with the id ${id}.`,
+          info: `No bills available for user ${id}.`,
         });
       }
     } catch (error) {
@@ -188,7 +203,7 @@ router.get(
       } = req;
 
       res.status(500).json({
-        error: `An error occurred during retrieving the bills for the user with the id ${id}.`,
+        error: `An server error occurred while retrieving bills for user ${id}.`,
       });
     }
   },
@@ -220,7 +235,7 @@ router.get(
       } = req;
 
       res.status(500).json({
-        error: `A server error occurred while retrieving the notifications for ${email}.`,
+        error: `A server error occurred while retrieving notifications for ${email}.`,
       });
     }
   },
@@ -302,6 +317,7 @@ router.delete(
       } = req;
 
       const billNotifications = await Bills.findBillNotifications(id);
+      console.log('bill notifications to be deleted--->', billNotifications);
 
       if (billNotifications && billNotifications.length) {
         billNotifications.forEach(notification => {
@@ -324,7 +340,7 @@ router.delete(
         });
       } else {
         res.status(404).json({
-          info: `Bill no. ${id} does not contain any notifications.`,
+          info: `There are no notifications for bill no. ${id}.`,
         });
       }
     } catch (error) {
@@ -332,7 +348,7 @@ router.delete(
         bill: { id },
       } = req;      
       res.status(500).json({
-        message: `An error occurred while deleting notifications for bill ${id}.`,
+        message: `An error occurred during deleting notifications for bill ${id}.`,
       });
     }
   },

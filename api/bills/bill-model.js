@@ -72,7 +72,8 @@ function findAllPaidBills(userId) {
 function add(bill) {
   return db('bills')
     .insert(bill, 'id')
-    .then(([id]) => this.findById(id));
+    //.then(([id]) => this.findById(id));
+    .then(([id]) => (id ? id : null));
 }
 
 function update(id, changes) {
