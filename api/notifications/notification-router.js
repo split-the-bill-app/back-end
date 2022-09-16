@@ -150,12 +150,12 @@ router.put(
           })*/
           res.status(200).json(successFlag)
         : res.status(500).json({
-            error: `An error occurred within the database and the notification could not be updated.`
+            error: `A server error occurred while updating the notification.`
           }          
         );         
     }catch (error) {
         res.status(500).json({
-          error: `An error occurred within the database and the notification could not be updated.`        
+          error: `A server error occurred while updating the notification.`        
         });     
     }
   },

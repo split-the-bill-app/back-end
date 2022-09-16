@@ -31,7 +31,7 @@ function findBy(filter) {
     .then(bill => (bill ? bill : null));
 }
 
-function findBillNotifications(bill_id) {
+function findBillNotifications(bill_id) { 
   return db('notifications as n')
     .join('bills as b', 'b.id', 'n.bill_id')
     .select('n.id', 'n.email', 'n.bill_id', 'n.paid', 'b.split_each_amount', 'b.description', 'b.split_people_count', 'b.created_at')
@@ -45,8 +45,7 @@ function findUserBillNotifications(email) {
     .join('users as u', 'u.id', 'b.user_id') //person that the bill is owed to
     .select('u.firstname', 'u.lastname', 'u.email', 'b.created_at', 'b.split_each_amount', 'b.description', 'n.paid')    
     .where('n.paid', false)
-    .where('n.email', '=', email);  
-    
+    .where('n.email', '=', email);      
 }
 
 //your friends owe you

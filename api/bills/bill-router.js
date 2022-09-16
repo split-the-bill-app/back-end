@@ -190,6 +190,7 @@ router.get(
 
     try {
       const userBills = await Bills.findBillNotifications(id);
+
       if (userBills && userBills.length) {
         res.status(200).json(userBills);
       } else {
@@ -281,10 +282,10 @@ router.get(
   async (req, res) => {
     const {
       params: { id },
-    } = req;
+    } = req;   
 
     try {
-      const paidBills = await Bills.findAllPaidBills(id);     
+      const paidBills = await Bills.findAllPaidBills(id);    
 
       if (paidBills && paidBills.length) {
         res.status(200).json(paidBills);
@@ -296,10 +297,10 @@ router.get(
     } catch (error) {
       const {
         params: { id },
-      } = req;      
+      } = req;         
 
       res.status(500).json({
-        error: `A server error occurred while retrieving paid bills owed to ${id}.`,
+        error: `A server error occurred while retrieving paid bills owed to user ${id}.`,
       });
     }
   },
