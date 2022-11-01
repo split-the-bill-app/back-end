@@ -16,8 +16,7 @@ router.get('/', AuthMiddleware.restricted, async (req, res) => {
   Notification.find()
     .then(notifications => {
       res.status(200).json({
-        notifications: notifications,
-        /* decodedToken: req.decodedToken, */
+        notifications: notifications        
       });
     })
     .catch(error =>
@@ -51,10 +50,7 @@ router.post(
         Notification.add({ bill_id, email })        
         .then(id => {//returns an object with the id ---> { id: 9 } 
           if(id){
-            Notification.findById(id.id)   
-            //this might return null even if the notification is created
-            //the front end makes a call to get all notifications for a bill by id so the front end is successfully updated  
-            //adding a catch block results in a 500 error and might result in server disconnecting       
+            Notification.findById(id.id)                
             .then(newNotification => {         
               if(newNotification){                
                   createdNotification.push({
@@ -96,7 +92,7 @@ router.post(
 
       //find notifications for the bill id
       //and send a twilio notification for each of them
-      await Bills.findBillNotifications(bill_id)
+      await Bills.findBillNotifications(bill_id) 
       .then(billNotifications => {
          billNotifications.forEach(notification => {
 

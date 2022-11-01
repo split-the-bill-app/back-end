@@ -50,7 +50,7 @@ async function validateRegisterEmail(req, res, next) {
     
     const user = await Users.findByUserEmail(email);
     user
-      ? res.status(409).json({
+      ? res.status(409).json({//error status 409 indicates conflict
         errorMsg: `${email} is associated with an existing account.`,
       })
       : 
@@ -80,7 +80,6 @@ async function validateEmail(req, res, next) {
       .json({ error: 'A server error occurred during validation of the email.' });
   }
 }
-
 
 async function validateUserId(req, res, next) {
   try {

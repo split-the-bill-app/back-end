@@ -22,7 +22,7 @@ exports.twilioNotification = (email, activeUserFirstName, activeUserLastName, sp
     console.error('sgMail send error--->', error);
 
     if (error.response) {
-      console.error('sgMail send error response--->', error.response.body)
+      console.error('sgMail send error response--->', error.response.body);
     }
   });
 };

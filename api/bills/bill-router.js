@@ -14,14 +14,13 @@ router.get('/', AuthMiddleware.restricted, async (req, res) => {
   Bills.find()
     .then(bills => {
       res.status(200).json({
-        bills: bills,
-        /* decodedToken: req.decodedToken, */
+        bills: bills       
       });
     })
     .catch(error =>
       res.status(500).json({
         error:
-          'An error occurred during fetching all bills. That one is on us!',
+          'A server error occurred while retrieving all bills.',
       }),
     );
 });
@@ -46,7 +45,7 @@ router.get(
       } = req;
 
       res.status(500).json({
-        error: `An error occurred during fetching a bill with the id ${id}.`,
+        error: `A server error occurred while retrieving bill ${id}.`,
       });
     }
   },
@@ -70,12 +69,9 @@ router.post(
         user_id,
         created_at: moment().format('MM-DD-YY'),
       })        
-      .then(id => {
+      .then(id => {//returns an object with the id ---> { id: 9 } 
         if(id){        
-          Bills.findById(id.id)
-          //this might return null even if the bill is created
-          //the front end makes a call to get all bills for a user so the front end is successfully updated  
-          //adding a catch block results in a 500 error and might result in server disconnecting 
+          Bills.findById(id.id)         
           .then(newBill => {
             if(newBill){             
               res.status(201).json({
@@ -204,7 +200,7 @@ router.get(
       } = req;
 
       res.status(500).json({
-        error: `An server error occurred while retrieving bills for user ${id}.`,
+        error: `A server error occurred while retrieving bills for user ${id}.`,
       });
     }
   },
@@ -221,16 +217,16 @@ router.get(
     } = req;
 
     try {
-      const userNotifications = await Bills.findUserBillNotifications(email);
+      const userNotifications = await Bills.findUserBillNotifications(email);     
 
       if (userNotifications && userNotifications.length) {
         res.status(200).json(userNotifications);
-      } else {
+      } else {       
         res.status(404).json({
           info: `No notifications were found for ${email}.`,
         });
       }
-    } catch (error) {
+    } catch (error) {     
       const {
         params: { email },
       } = req;
@@ -268,7 +264,7 @@ router.get(
       } = req;     
 
       res.status(500).json({
-        error: `A server error occurred while retrieving bills owed to ${id}.`,
+        error: `A server error occurred while retrieving bills owed to user ${id}.`,
       });
     }
   },
@@ -350,7 +346,7 @@ router.delete(
         bill: { id },
       } = req;      
       res.status(500).json({
-        message: `An error occurred during deleting notifications for bill ${id}.`,
+        message: `An error occurred while deleting notifications for bill ${id}.`,
       });
     }
   },

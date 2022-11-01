@@ -3,6 +3,7 @@ const helmet = require('helmet');
 const moment = require('moment');
 const cors = require('cors');
 
+//import routers
 const UsersRouter = require('./api/users/user-router.js');
 const BillsRouter = require('./api/bills/bill-router.js');
 const NotificationsRouter = require('./api/notifications/notification-router.js');
@@ -20,6 +21,7 @@ server.get('/', (req, res) => {
   );
 });
 
+//mount the routers/endpoints and apply them like middleware
 server.use('/api/users', UsersRouter);
 server.use('/api/bills', BillsRouter);
 server.use('/api/notifications', NotificationsRouter);
@@ -33,7 +35,7 @@ function Requestlogger(req, res, next) {
   next();
 }
 
-// This line might come in handy as a start script for the heroku postgres deployment
+// This line might be needed as a start script for the heroku postgres deployment
 /* "heroku-postbuild": "npm install --production && knex migrate:latest" */
 
 module.exports = server;

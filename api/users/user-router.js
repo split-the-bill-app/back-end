@@ -12,19 +12,20 @@ const router = express.Router();
 const AuthMiddleware = require('../middleware/auth-middleware.js');
 const ValidateMiddleware = require('../middleware/validate-middleware.js');
 
+/***************************************ENDPOINTS BEGINNING WITH API/USERS****************************/
+
 //GET ALL USERS
 router.get('/', AuthMiddleware.restricted, async (req, res) => {
   Users.find()
     .then(users => {
       res.status(200).json({
-        users: usersWithoutPassword(users),
-        /* decodedToken: req.decodedToken, */
+        users: usersWithoutPassword(users)       
       });
     })
     .catch(error =>
       res.status(500).json({
         error:
-          'An error occurred during fetching all users. That one is on us!',
+          'A server error occurred while fetching all users.',
       }),
     );
 });
@@ -54,7 +55,7 @@ router.get(
       } = req;
 
       res.status(500).json({
-        error: `An error occurred during fetching a user with the id ${id}.`,
+        error: `A server error occurred while retrieving user ${id}'s information.`,
       });
     }
   },
@@ -183,7 +184,7 @@ router.put(
             message: `The user with the id ${id} has been successfully updated!`,
           })
         : res.status(500).json({
-            error: `An error occurred within the database thus the user with the id ${id} could not be updated.`,
+            error: `A server error occurred that prevented user ${id} from being updated.`,
           });
     } catch (error) {
       const {
@@ -192,7 +193,7 @@ router.put(
 
       res.status(500).json({
         error:
-          `An error occurred during updating the user with the id ${id}.` +
+          `A server error occurred while updating user ${id}.` +
           error,
       });
     }
@@ -215,7 +216,7 @@ router.get(
         res.status(200).json(userBills);
       } else {
         res.status(404).json({
-          info: `No bills are available for the user with the id ${id}.`,
+          info: `No bills are available for user ${id}.`,
         });
       }
     } catch (error) {
@@ -224,7 +225,7 @@ router.get(
       } = req;
 
       res.status(500).json({
-        error: `An error occurred retrieving the bills for the user with the id ${id}.`,
+        error: `An server error occurred while retrieving user ${id}'s bills.`,
       });
     }
   },

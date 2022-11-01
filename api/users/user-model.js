@@ -1,3 +1,6 @@
+//abstract database logic into model files
+
+//import database configuration or object
 const db = require('../../data/db-config.js');
 
 module.exports = {
@@ -95,7 +98,8 @@ function findByUserEmail(user_email) {
 
 function add(user) {
   return db('users')
-    .insert(user, 'id')    
+    .insert(user, 'id')  
+    //the return id is enclosed in [], using [id] removes the []  
     .then(([id]) => (id ? id : null)); 
 }
 
