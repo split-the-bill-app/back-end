@@ -19,9 +19,9 @@ exports.twilioNotification = (email, activeUserFirstName, activeUserLastName, sp
   };
   sgMail.send(msg)
   .then(() => {
-    console.log('sgMail email sent.');
+    console.log('sgMail email sent successfully.');
   })
   .catch((error) => {
-    console.error('sgMail send email error:', error);
+    console.error('sgMail email sent error:', error);
   })
 };
