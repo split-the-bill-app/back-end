@@ -14,15 +14,14 @@ exports.twilioNotification = (email, activeUserFirstName, activeUserLastName, sp
     to: email,
     from: 'notifications@SplitTheBillApp',
     subject: `${activeUserFirstName} sent you a bill notification from SplitTheBillApp`,
-    text: `${activeUserFirstName} has sent you a bill notification from <a href='https://www.splitthebillmain.netlify.com/'>SplitTheBillMain.netlify.com</a>`,
+    text: `${activeUserFirstName} sent you a bill notification from <a href='https://split-the-bill-main.netlify.app/'>split-the-bill-main.netlify.app/</a>`,
     html: `You owe <strong style="color:#5557FE;">&nbsp;${activeUserFirstName} ${activeUserLastName}&nbsp;</strong> $${split_each_amount} for ${description} on ${created_at}.`
   };
   sgMail.send(msg)
-  .then(() => {}, error => {
-    console.error('sgMail send error--->', error);
-
-    if (error.response) {
-      console.error('sgMail send error response--->', error.response.body);
-    }
-  });
+  .then(() => {
+    console.log('sgMail email sent.');
+  })
+  .catch((error) => {
+    console.error('sgMail send email error:', error);
+  })
 };
