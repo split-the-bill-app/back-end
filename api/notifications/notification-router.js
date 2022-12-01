@@ -33,29 +33,28 @@ router.post(
     let { bill_id, email } = req.body;
 
     let createdNotifications = [];
+    let billForNotification = null;
 
     if (
       bill_id &&
       email &&
       Object.keys(req.body).length == 2 &&
       Array.isArray(email)
-      ){  
-        
-      var billForNotification = null;
-        
-     //find bill for the bill_id entered as part of req.body
-     //notifications are sent for one bill at a time    
-     await Bills.findById(bill_id)
-     .then((billForNotificationFound) => {
+      ){       
+              
+    //find bill for the bill_id entered as part of req.body
+    //notifications are sent for one bill at a time    
+    await Bills.findById(bill_id)
+    .then((billForNotificationFound) => {
       if(billForNotificationFound){
         billForNotification = {...billForNotificationFound};
       }
-     })
-     .catch( error => {
+    })
+    .catch( error => {
         console.log('billForNotificationFound error', error);
-     })
+    })
 
-     console.log('billForNotification', billForNotification);  
+    console.log('billForNotification', billForNotification);  
 
       //first we create and add the notifications to the database
       await email.forEach(email => {
@@ -64,7 +63,8 @@ router.post(
           if(id){
             Notification.findById(id.id)                
             .then(newNotification => {         
-              if(newNotification && billForNotification){                
+              if(newNotification && billForNotification){  
+                console.log('if new notification and bill for notification', newNotification);              
                   createdNotifications.push({
                     id: newNotification.id,
                     bill_id: newNotification.bill_id,
