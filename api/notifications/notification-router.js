@@ -70,44 +70,46 @@ router.post(
                 console.log('created notifications 1', createdNotifications);  
               }            
             })
-            .then( async () => {
-              const activeUser = await Users.findById(billForNotification.user_id);
-
-              console.log('created notifications 2', createdNotifications);
-          
-              //find notifications for the bill id
-              //and send a twilio notification for each of them
-              //await Bills.findBillNotifications(bill_id) 
-              //.then(awaitbillNotifications => {
-                if(activeUser){
-                  console.log('created notifications 3', createdNotifications);
-                  createdNotifications.forEach(notification => {          
-                    goSend.twilioNotification(
-                      notification.email,
-                      activeUser.firstname,
-                      activeUser.lastname,
-                      notification.split_each_amount,
-                      notification.description,
-                      notification.created_at
-                    );
-                  })
-                }        
-
-            })
+            
           }else{
             console.log('No id returned after adding a new notification.');
           }                     
         })
+        .then( async (result) => {
+          const activeUser = await Users.findById(billForNotification.user_id);
+          
+          console.log('result', result);
+          console.log('created notifications 2', createdNotifications);
+      
+          //find notifications for the bill id
+          //and send a twilio notification for each of them
+          //await Bills.findBillNotifications(bill_id) 
+          //.then(awaitbillNotifications => {
+            if(activeUser){
+              console.log('created notifications 3', createdNotifications);
+              createdNotifications.forEach(notification => {          
+                goSend.twilioNotification(
+                  notification.email,
+                  activeUser.firstname,
+                  activeUser.lastname,
+                  notification.split_each_amount,
+                  notification.description,
+                  notification.created_at
+                );
+              })
+            }        
+
+        })
         .catch(error => {     
           res.status(500).json({
-            error: 'An error occurred while sending the notification.',
+            error: 'An error occurred while sending the notification(s).',
           });
         });
 
       });//end forEach
       res.status(201).json({
         message: 'Notification(s) sent successfully.',
-      });     
+      });
 
     } else {
       res.status(400).json({
