@@ -35,29 +35,23 @@ router.post(
     let createdNotifications = [];
     let billForNotification = null;
 
-    if (
-      bill_id &&
-      email &&
-      Object.keys(req.body).length == 2 &&
-      Array.isArray(email)
-      ){       
-              
-    //find bill for the bill_id entered as part of req.body
-    //notifications are sent for one bill at a time    
-    await Bills.findById(bill_id)
-    .then((billForNotificationFound) => {
-      if(billForNotificationFound){
-        billForNotification = {...billForNotificationFound};
-      }
-    })
-    .catch( error => {
-        console.log('billForNotificationFound error', error);
-    })
+    if (bill_id && email && Object.keys(req.body).length == 2 && Array.isArray(email) ){                     
+      //find bill for the bill_id entered as part of req.body
+      //notifications are sent for one bill at a time    
+      await Bills.findById(bill_id)
+      .then((billForNotificationFound) => {
+        if(billForNotificationFound){
+          billForNotification = {...billForNotificationFound};
+        }
+      })
+      .catch( error => {
+          console.log('billForNotificationFound error', error);
+      })
 
-    console.log('billForNotification', billForNotification);  
+      console.log('billForNotification', billForNotification);  
 
       //first we create and add the notifications to the database
-      await email.forEach(email => {
+      email.forEach(email => {
         Notification.add({ bill_id, email })        
         .then(id => {//returns an object with the id ---> { id: 9 } 
           if(id){
@@ -105,31 +99,32 @@ router.post(
     // Create twilio notification
     const activeUser = await Users.findById(billForNotification.user_id);
 
-    console.log('created notifications', createdNotifications);
+    console.log('created notifications 1', createdNotifications);
 
-      //find notifications for the bill id
-      //and send a twilio notification for each of them
-      await Bills.findBillNotifications(bill_id) 
-      .then(billNotifications => {
-        if(activeUser){
-          createdNotifications.forEach(notification => {          
-            goSend.twilioNotification(
-              notification.email,
-              activeUser.firstname,
-              activeUser.lastname,
-              notification.split_each_amount,
-              notification.description,
-              notification.created_at
-            );
-          })
-        }        
-      })
-      .catch(error => {       
-        res.status(500).json({
-          error:
-            'An error occurred while sending twilio notifications 1!'
+    //find notifications for the bill id
+    //and send a twilio notification for each of them
+    await Bills.findBillNotifications(bill_id) 
+    .then(billNotifications => {
+      if(activeUser){
+        console.log('created notifications 2', createdNotifications);
+        createdNotifications.forEach(notification => {          
+          goSend.twilioNotification(
+            notification.email,
+            activeUser.firstname,
+            activeUser.lastname,
+            notification.split_each_amount,
+            notification.description,
+            notification.created_at
+          );
         })
-      }) 
+      }        
+    })
+    .catch(error => {       
+      res.status(500).json({
+        error:
+          'An error occurred while sending twilio notifications 1!'
+      })
+    }) 
 
     }//end outer try
     catch(error){
