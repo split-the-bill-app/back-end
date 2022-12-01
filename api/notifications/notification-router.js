@@ -53,20 +53,20 @@ router.post(
       //first we create and add the notifications to the database
       email.forEach(async email => {
         await Notification.add({ bill_id, email })        
-        .then( async id => {//returns an object with the id ---> { id: 9 } 
+        .then(id => {//returns an object with the id ---> { id: 9 } 
           if(id){
-            await Notification.findById(id.id)                
+            Notification.findById(id.id)                
             .then(newNotification => {         
               if(newNotification && billForNotification){  
                 console.log('if new notification and bill for notification', newNotification);              
-                  createdNotifications.push({
-                    id: newNotification.id,
-                    bill_id: newNotification.bill_id,
-                    email: newNotification.email,
-                    split_each_amount: billForNotification.split_each_amount,
-                    description: billForNotification.description ? billForNotification.description : '',
-                    created_at: billForNotification.created_at
-                  });   
+                createdNotifications.push({
+                  id: newNotification.id,
+                  bill_id: newNotification.bill_id,
+                  email: newNotification.email,
+                  split_each_amount: billForNotification.split_each_amount,
+                  description: billForNotification.description ? billForNotification.description : '',
+                  created_at: billForNotification.created_at
+                });   
               }            
             })
           }else{
@@ -104,7 +104,7 @@ router.post(
     //find notifications for the bill id
     //and send a twilio notification for each of them
     await Bills.findBillNotifications(bill_id) 
-    .then(billNotifications => {
+    .then(awaitbillNotifications => {
       if(activeUser){
         console.log('created notifications 2', createdNotifications);
         createdNotifications.forEach(notification => {          
