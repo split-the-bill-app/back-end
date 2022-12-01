@@ -59,8 +59,8 @@ router.post(
                     bill_id: newNotification.bill_id,
                     email: newNotification.email,
                     split_each_amount: billForNotification.split_each_amount,
-                    description: billForNotification.description,
-                    created_at: billForNotification.created_at
+                    description: billForNotification.description ? billForNotification.description: '',
+                    created_at: billForNotification.created_at ? billForNotification.created_at: ''
                   });   
               }            
             })
