@@ -51,8 +51,8 @@ router.post(
       console.log('billForNotification', billForNotification);  
 
       //first we create and add the notifications to the database
-      email.forEach(async email => {
-        await Notification.add({ bill_id, email })        
+      email.forEach(email => {
+        Notification.add({ bill_id, email })        
         .then(id => {//returns an object with the id ---> { id: 9 } 
           if(id){
             Notification.findById(id.id)                
@@ -67,7 +67,7 @@ router.post(
                   description: billForNotification.description ? billForNotification.description : '',
                   created_at: billForNotification.created_at
                 }); 
-                console.log('created notifications 3', createdNotifications);  
+                console.log('created notifications 1', createdNotifications);  
               }            
             })
           }else{
@@ -100,14 +100,14 @@ router.post(
     // Create twilio notification
     const activeUser = await Users.findById(billForNotification.user_id);
 
-    console.log('created notifications 1', createdNotifications);
+    console.log('created notifications 2', createdNotifications);
 
     //find notifications for the bill id
     //and send a twilio notification for each of them
     //await Bills.findBillNotifications(bill_id) 
     //.then(awaitbillNotifications => {
       if(activeUser){
-        console.log('created notifications 2', createdNotifications);
+        console.log('created notifications 3', createdNotifications);
         createdNotifications.forEach(notification => {          
           goSend.twilioNotification(
             notification.email,
