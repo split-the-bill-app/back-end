@@ -43,7 +43,17 @@ router.post(
         
      //find bill for the bill_id entered as part of req.body
      //notifications are sent for one bill at a time
-     const billForNotification = await Bills.findById(bill_id);  
+     const billForNotification = null;
+     await Bills.findById(bill_id)
+     .then((billForNotificationFound) => {
+      if(billForNotificationFound){
+        billForNotification = billForNotificationFound;
+      }
+     })
+     .catch( error => {
+        console.log('billForNotificationFound error', error);
+     })
+     
      console.log('billForNotification', billForNotification);  
 
       //first we create and add the notifications to the database
@@ -59,8 +69,8 @@ router.post(
                     bill_id: newNotification.bill_id,
                     email: newNotification.email,
                     split_each_amount: billForNotification.split_each_amount,
-                    description: billForNotification.description ? billForNotification.description: '',
-                    created_at: billForNotification.created_at ? billForNotification.created_at: ''
+                    description: billForNotification.description ? billForNotification.description : '',
+                    created_at: billForNotification.created_at
                   });   
               }            
             })
