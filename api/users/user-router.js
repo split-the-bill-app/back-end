@@ -3,12 +3,8 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const secrets = require('../../data/secrets/secret.js');
-var SECRET = "you will never guess";
-
 const Users = require('./user-model.js');
-
 const router = express.Router();
-
 const AuthMiddleware = require('../middleware/auth-middleware.js');
 const ValidateMiddleware = require('../middleware/validate-middleware.js');
 
@@ -319,7 +315,7 @@ function generateJWT(user) {
     expiresIn: '24h',
   };
 
-  return jwt.sign(payload, /*SECRET*/ secrets.jwtSecret, options);  
+  return jwt.sign(payload, secrets.jwtSecret, options);  
 }
 
 module.exports = router;

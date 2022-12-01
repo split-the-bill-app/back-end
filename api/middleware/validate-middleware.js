@@ -1,5 +1,4 @@
 const moment = require("moment");
-
 const Users = require('../users/user-model.js');
 const Bills = require('../bills/bill-model.js');
 const Notifications = require('../notifications/notification-model.js');
@@ -145,7 +144,7 @@ function validateNotification(req, res, next) {
 
   if (!body) {
     res.status(400).json({ warning: 'Missing notification data entirely.' });
-  } else if (/*!split_sum ||*/ !email || !bill_id) {
+  } else if (!email || !bill_id) {
     res.status(400).json({
       warning:
         'Missing required email or bill_id information for a notification.',

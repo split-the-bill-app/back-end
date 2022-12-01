@@ -1,5 +1,3 @@
-//abstract database logic into model files
-
 //import database configuration or object
 const db = require('../../data/db-config.js');
 
@@ -50,7 +48,7 @@ function update(id, changes) {
     .where({ id })
     .update(changes)
     .then( count => {
-      return count > 0 ? findById(id) : null;   //return the newly updated notification   
+      return count > 0 ? findById(id) : null;   //return the updated notification   
   })
 }
 

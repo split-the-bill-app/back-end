@@ -1,5 +1,3 @@
-//abstract database logic into model files
-
 //import database configuration or object
 const db = require('../../data/db-config.js');
 

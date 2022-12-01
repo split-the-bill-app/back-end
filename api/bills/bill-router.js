@@ -1,11 +1,8 @@
 const express = require('express');
 const moment = require('moment');
-
 const Bills = require('./bill-model.js');
 const Notification = require('../notifications/notification-model.js');
-
 const router = express.Router();
-
 const AuthMiddleware = require('../middleware/auth-middleware.js');
 const ValidateMiddleware = require('../middleware/validate-middleware.js');
 
