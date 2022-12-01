@@ -38,7 +38,7 @@ router.post(
     if (bill_id && email && Object.keys(req.body).length == 2 && Array.isArray(email) ){                     
       //find bill for the bill_id entered as part of req.body
       //notifications are sent for one bill at a time    
-      Bills.findById(bill_id)
+      await Bills.findById(bill_id)
       .then((billForNotificationFound) => {
         if(billForNotificationFound){
           billForNotification = {...billForNotificationFound};
@@ -51,7 +51,7 @@ router.post(
       console.log('billForNotification', billForNotification);  
 
       //first we create and add the notifications to the database
-      email.forEach(async email => {
+      email.forEach(email => {
         Notification.add({ bill_id, email })        
         .then(id => {//returns an object with the id ---> { id: 9 } 
           if(id){
