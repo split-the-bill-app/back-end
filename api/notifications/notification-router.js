@@ -114,7 +114,6 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
   }     
 });//end router.post
 
-
 //UPDATE A NOTIFICATION
 router.put(
   '/:id',
