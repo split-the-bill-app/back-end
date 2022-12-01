@@ -66,7 +66,8 @@ router.post(
                   split_each_amount: billForNotification.split_each_amount,
                   description: billForNotification.description ? billForNotification.description : '',
                   created_at: billForNotification.created_at
-                });   
+                }); 
+                console.log('created notifications 3', createdNotifications);  
               }            
             })
           }else{
