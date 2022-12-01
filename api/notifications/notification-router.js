@@ -70,7 +70,7 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
             console.log('No id returned after adding a new notification.');
           }                     
         })
-        //then create twilio notification(s)
+        //then create and send twilio notification(s)
         .then( async () => {
           const activeUser = await Users.findById(billForNotification.user_id);         
              
