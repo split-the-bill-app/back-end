@@ -104,8 +104,8 @@ router.post(
 
     //find notifications for the bill id
     //and send a twilio notification for each of them
-    await Bills.findBillNotifications(bill_id) 
-    .then(awaitbillNotifications => {
+    //await Bills.findBillNotifications(bill_id) 
+    //.then(awaitbillNotifications => {
       if(activeUser){
         console.log('created notifications 2', createdNotifications);
         createdNotifications.forEach(notification => {          
@@ -119,13 +119,13 @@ router.post(
           );
         })
       }        
-    })
-    .catch(error => {       
-      res.status(500).json({
-        error:
-          'An error occurred while sending twilio notifications 1!'
-      })
-    }) 
+    //})
+    //.catch(error => {       
+      //res.status(500).json({
+       // error:
+          //'An error occurred while sending twilio notifications 1!'
+      //})
+    //}) 
 
     }//end outer try
     catch(error){
