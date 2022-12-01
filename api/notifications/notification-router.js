@@ -51,11 +51,11 @@ router.post(
       console.log('billForNotification', billForNotification);  
 
       //first we create and add the notifications to the database
-      email.forEach(email => {
-        Notification.add({ bill_id, email })        
-        .then(id => {//returns an object with the id ---> { id: 9 } 
+      email.forEach(async email => {
+        await Notification.add({ bill_id, email })        
+        .then( async id => {//returns an object with the id ---> { id: 9 } 
           if(id){
-            Notification.findById(id.id)                
+            await Notification.findById(id.id)                
             .then(newNotification => {         
               if(newNotification && billForNotification){  
                 console.log('if new notification and bill for notification', newNotification);              
