@@ -52,8 +52,10 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
                       description: billForNotification.description ? billForNotification.description : '',
                       created_at: billForNotification.created_at
                     });                
-                  }  
+                  }                  
                   
+                })
+                .then(() => {
                   if(createdNotifications && email && createdNotifications.length === email.length){
                     //then create and send twilio notification(s)      
                     const activeUser = Users.findById(billForNotification.user_id);    
