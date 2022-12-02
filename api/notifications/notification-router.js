@@ -28,18 +28,21 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
   try {
     let { bill_id, email } = req.body;
 
-    let createdNotifications = [];
+    
     let billForNotification = null;
 
     if (bill_id && email && Object.keys(req.body).length == 2 && Array.isArray(email) ){                    
-      await Bills.findById(bill_id)
+      Bills.findById(bill_id)
       .then((billForNotificationFound) => {
+        let createdNotifications = [];
+
         if(billForNotificationFound){
+         
           billForNotification = {...billForNotificationFound};
           
           //first create and add the notifications to the database
-          email.forEach(async email => {
-            await Notification.add({ bill_id, email })        
+          email.forEach(email => {
+            Notification.add({ bill_id, email })        
             .then(id => {//returns an object with the id ---> { id: 9 } 
               if(id){
                 Notification.findById(id.id)                
@@ -68,19 +71,21 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
           });//end forEach      
           res.status(201).json({
             message: 'Notification(s) sent successfully.',
-          });
-          
+          });          
         }//end if
+
+        return createdNotifications;
       })
       .catch(error => {
         console.log('No bill found for created notifications.', error);
       })
-      .then(() => {
+      .then((createdNotifications) => {
         //then create and send twilio notification(s)      
-        const activeUser = Users.findById(billForNotification.user_id);        
+        const activeUser = Users.findById(billForNotification.user_id);    
+        console.log('created notifications 1--->', createdNotifications);    
                     
-        if(activeUser){
-          console.log('created notifications--->', createdNotifications);
+        if(activeUser && createdNotifications){
+          console.log('created notifications 2--->', createdNotifications);
 
           createdNotifications.forEach(notification => {          
             goSend.twilioNotification(
