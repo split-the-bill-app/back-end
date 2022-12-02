@@ -51,32 +51,31 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
                       split_each_amount: billForNotification.split_each_amount,
                       description: billForNotification.description ? billForNotification.description : '',
                       created_at: billForNotification.created_at
-                    });                
-                  }                  
-                  
-                })
-                .then(() => {
-                  if(createdNotifications && email && createdNotifications.length === email.length){
-                    //then create and send twilio notification(s)      
-                    const activeUser = Users.findById(billForNotification.user_id);    
-                    console.log('created notifications 1--->', createdNotifications);    
-                                
-                    if(activeUser){
-                      console.log('created notifications 2--->', createdNotifications);
-    
-                      createdNotifications.forEach(notification => {          
-                        goSend.twilioNotification(
-                          notification.email,
-                          activeUser.firstname,
-                          activeUser.lastname,
-                          notification.split_each_amount,
-                          notification.description,
-                          notification.created_at
-                        );
-                      })
+                    });     
+
+                    console.log('created notifications 1--->', createdNotifications); 
+                    
+                    if(createdNotifications && email && createdNotifications.length === email.length){
+                      //then create and send twilio notification(s)      
+                      const activeUser = Users.findById(billForNotification.user_id);                             
+                                  
+                      if(activeUser){
+                        console.log('created notifications 2--->', createdNotifications);
+      
+                        createdNotifications.forEach(notification => {          
+                          goSend.twilioNotification(
+                            notification.email,
+                            activeUser.firstname,
+                            activeUser.lastname,
+                            notification.split_each_amount,
+                            notification.description,
+                            notification.created_at
+                          );
+                        })
+                      }
                     }
-                  }
-                })
+                  }                  
+                })               
                 .catch(error => {     
                   res.status(500).json({
                     error: 'An error occurred while adding the notification(s) to the database.',
