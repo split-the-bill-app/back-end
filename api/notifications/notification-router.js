@@ -36,68 +36,65 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
       .then((billForNotificationFound) => {
         if(billForNotificationFound){
           billForNotification = {...billForNotificationFound};
+          
+          //first create and add the notifications to the database
+          email.forEach(email => {
+            Notification.add({ bill_id, email })        
+            .then(id => {//returns an object with the id ---> { id: 9 } 
+              if(id){
+                Notification.findById(id.id)                
+                .then(newNotification => {         
+                  if(newNotification && billForNotification){                              
+                    createdNotifications.push({
+                      id: newNotification.id,
+                      bill_id: newNotification.bill_id,
+                      email: newNotification.email,
+                      split_each_amount: billForNotification.split_each_amount,
+                      description: billForNotification.description ? billForNotification.description : '',
+                      created_at: billForNotification.created_at
+                    });                
+                  }            
+                })
+                .catch(error => {     
+                  res.status(500).json({
+                    error: 'An error occurred while adding the notification(s) to the database.',
+                  });
+                }); 
+                
+              }else{
+                console.log('No id returned after adding a new notification.');
+              }                     
+            })
+          });//end forEach      
+          res.status(201).json({
+            message: 'Notification(s) sent successfully.',
+          });
+          
+        }//end if
+      })
+      .then( () => {
+        //then create and send twilio notification(s)      
+        const activeUser = Users.findById(billForNotification.user_id);         
+        console.log('in async');
+            
+        if(activeUser){
+          console.log('created notifications 3', createdNotifications);
+          
+          createdNotifications.forEach(notification => {          
+            goSend.twilioNotification(
+              notification.email,
+              activeUser.firstname,
+              activeUser.lastname,
+              notification.split_each_amount,
+              notification.description,
+              notification.created_at
+            );
+          })
         }
       })
       .catch(error => {
           console.log('No bill found for created notifications.', error);
-      })       
-
-      //first create and add the notifications to the database
-      email.forEach(email => {
-        Notification.add({ bill_id, email })        
-        .then(id => {//returns an object with the id ---> { id: 9 } 
-          if(id){
-            Notification.findById(id.id)                
-            .then(newNotification => {         
-              if(newNotification && billForNotification){                              
-                createdNotifications.push({
-                  id: newNotification.id,
-                  bill_id: newNotification.bill_id,
-                  email: newNotification.email,
-                  split_each_amount: billForNotification.split_each_amount,
-                  description: billForNotification.description ? billForNotification.description : '',
-                  created_at: billForNotification.created_at
-                });                
-              }            
-            })
-            .catch(error => {     
-              res.status(500).json({
-                error: 'An error occurred while adding the notification(s) to the database.',
-              });
-            }); 
-            
-          }else{
-            console.log('No id returned after adding a new notification.');
-          }                     
-        })
-        //then create and send twilio notification(s)
-        .then( async () => {
-          const activeUser = await Users.findById(billForNotification.user_id);         
-             
-          if(activeUser){
-            console.log('created notifications 3', createdNotifications);
-            createdNotifications.forEach(notification => {          
-              goSend.twilioNotification(
-                notification.email,
-                activeUser.firstname,
-                activeUser.lastname,
-                notification.split_each_amount,
-                notification.description,
-                notification.created_at
-              );
-            })
-          }        
-        })
-        .catch(error => {     
-          res.status(500).json({
-            error: 'An error occurred while sending the notification(s) via Twilio.'
-          });
-        });
-
-      });//end forEach
-      res.status(201).json({
-        message: 'Notification(s) sent successfully.',
-      });
+      })
 
     }else {
       res.status(400).json({
@@ -112,6 +109,7 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
       error: 'A server error occurred while sending the notification(s).'
     })
   }     
+
 });//end router.post
 
 //UPDATE A NOTIFICATION
