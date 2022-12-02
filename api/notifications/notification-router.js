@@ -52,7 +52,28 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
                       description: billForNotification.description ? billForNotification.description : '',
                       created_at: billForNotification.created_at
                     });                
-                  }            
+                  }  
+                  
+                  if(createdNotifications && email && createdNotifications.length === email.length){
+                    //then create and send twilio notification(s)      
+                    const activeUser = Users.findById(billForNotification.user_id);    
+                    console.log('created notifications 1--->', createdNotifications);    
+                                
+                    if(activeUser){
+                      console.log('created notifications 2--->', createdNotifications);
+    
+                      createdNotifications.forEach(notification => {          
+                        goSend.twilioNotification(
+                          notification.email,
+                          activeUser.firstname,
+                          activeUser.lastname,
+                          notification.split_each_amount,
+                          notification.description,
+                          notification.created_at
+                        );
+                      })
+                    }
+                  }
                 })
                 .catch(error => {     
                   res.status(500).json({
@@ -64,26 +85,7 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
                 console.log('No id returned after adding a new notification.');
               }      
               
-              if(createdNotifications && email && createdNotifications.length === email.length){
-                //then create and send twilio notification(s)      
-                const activeUser = Users.findById(billForNotification.user_id);    
-                console.log('created notifications 1--->', createdNotifications);    
-                            
-                if(activeUser && createdNotifications){
-                  console.log('created notifications 2--->', createdNotifications);
-
-                  createdNotifications.forEach(notification => {          
-                    goSend.twilioNotification(
-                      notification.email,
-                      activeUser.firstname,
-                      activeUser.lastname,
-                      notification.split_each_amount,
-                      notification.description,
-                      notification.created_at
-                    );
-                  })
-                }
-              }
+             
             })
           });//end forEach      
           res.status(201).json({
