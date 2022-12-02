@@ -38,8 +38,8 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
           billForNotification = {...billForNotificationFound};
           
           //first create and add the notifications to the database
-          email.forEach(email => {
-            Notification.add({ bill_id, email })        
+          email.forEach(async email => {
+            await Notification.add({ bill_id, email })        
             .then(id => {//returns an object with the id ---> { id: 9 } 
               if(id){
                 Notification.findById(id.id)                
@@ -72,14 +72,16 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
           
         }//end if
       })
-      .then( () => {
+      .catch(error => {
+        console.log('No bill found for created notifications.', error);
+      })
+      .then(() => {
         //then create and send twilio notification(s)      
-        const activeUser = Users.findById(billForNotification.user_id);         
-        console.log('in async');
-            
+        const activeUser = Users.findById(billForNotification.user_id);        
+                    
         if(activeUser){
-          console.log('created notifications 3', createdNotifications);
-          
+          console.log('created notifications--->', createdNotifications);
+
           createdNotifications.forEach(notification => {          
             goSend.twilioNotification(
               notification.email,
@@ -93,8 +95,8 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
         }
       })
       .catch(error => {
-          console.log('No bill found for created notifications.', error);
-      })
+        console.log('An error occurred while sending the Twilio notification(s).', error);
+      })     
 
     }else {
       res.status(400).json({
