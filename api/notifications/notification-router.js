@@ -29,6 +29,7 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
     let { bill_id, email } = req.body;
     let createdNotifications = [];    
     let billForNotification = null;
+    let emailArrayLength = email.length;
 
     if (bill_id && email && Object.keys(req.body).length == 2 && Array.isArray(email) ){                    
       Bills.findById(bill_id)
@@ -55,7 +56,7 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
 
                     console.log('created notifications 1--->', createdNotifications); 
                     
-                    if(createdNotifications && email && createdNotifications.length === email.length){
+                    if(createdNotifications && createdNotifications.length === emailArrayLength.length){
                       //then create and send twilio notification(s)      
                       const activeUser = Users.findById(billForNotification.user_id);                             
                                   
