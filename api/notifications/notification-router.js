@@ -58,7 +58,8 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
                     
                     if(createdNotifications && createdNotifications.length === emailArrayLength.length){
                       //then create and send twilio notification(s)      
-                      const activeUser = Users.findById(billForNotification.user_id);                             
+                      const activeUser = Users.findById(billForNotification.user_id);      
+                      console.log('active User--->', activeUser);                       
                                   
                       if(activeUser){
                         console.log('created notifications 2--->', createdNotifications);
