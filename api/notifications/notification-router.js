@@ -27,17 +27,13 @@ router.get('/', AuthMiddleware.restricted, async (req, res) => {
 router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotification, async (req, res) => {
   try {
     let { bill_id, email } = req.body;
-
-    
+    let createdNotifications = [];    
     let billForNotification = null;
 
     if (bill_id && email && Object.keys(req.body).length == 2 && Array.isArray(email) ){                    
       Bills.findById(bill_id)
       .then((billForNotificationFound) => {
-        let createdNotifications = [];
-
-        if(billForNotificationFound){
-         
+        if(billForNotificationFound){         
           billForNotification = {...billForNotificationFound};
           
           //first create and add the notifications to the database
@@ -66,43 +62,36 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
                 
               }else{
                 console.log('No id returned after adding a new notification.');
-              }                     
+              }      
+              
+              if(createdNotifications && email && createdNotifications.length === email.length){
+                //then create and send twilio notification(s)      
+                const activeUser = Users.findById(billForNotification.user_id);    
+                console.log('created notifications 1--->', createdNotifications);    
+                            
+                if(activeUser && createdNotifications){
+                  console.log('created notifications 2--->', createdNotifications);
+
+                  createdNotifications.forEach(notification => {          
+                    goSend.twilioNotification(
+                      notification.email,
+                      activeUser.firstname,
+                      activeUser.lastname,
+                      notification.split_each_amount,
+                      notification.description,
+                      notification.created_at
+                    );
+                  })
+                }
+              }
             })
           });//end forEach      
           res.status(201).json({
             message: 'Notification(s) sent successfully.',
           });          
-        }//end if
-
-        return createdNotifications;
+        }//end if        
       })
-      .catch(error => {
-        console.log('No bill found for created notifications.', error);
-      })
-      .then((createdNotifications) => {
-        //then create and send twilio notification(s)      
-        const activeUser = Users.findById(billForNotification.user_id);    
-        console.log('created notifications 1--->', createdNotifications);    
-                    
-        if(activeUser && createdNotifications){
-          console.log('created notifications 2--->', createdNotifications);
-
-          createdNotifications.forEach(notification => {          
-            goSend.twilioNotification(
-              notification.email,
-              activeUser.firstname,
-              activeUser.lastname,
-              notification.split_each_amount,
-              notification.description,
-              notification.created_at
-            );
-          })
-        }
-      })
-      .catch(error => {
-        console.log('An error occurred while sending the Twilio notification(s).', error);
-      })     
-
+      
     }else {
       res.status(400).json({
         warning:
