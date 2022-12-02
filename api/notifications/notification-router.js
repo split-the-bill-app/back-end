@@ -43,7 +43,7 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
             .then(id => {//returns an object with the id ---> { id: 9 } 
               if(id){
                 Notification.findById(id.id)                
-                .then(newNotification => {         
+                .then(async newNotification => {         
                   if(newNotification && billForNotification){                              
                     createdNotifications.push({
                       id: newNotification.id,
@@ -58,7 +58,7 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
                     
                     if(createdNotifications && createdNotifications.length === emailArrayLength){
                       //then create and send twilio notification(s)      
-                      const activeUser = Users.findById(billForNotification.user_id);      
+                      const activeUser = await Users.findById(billForNotification.user_id);      
                       console.log('active User--->', activeUser);                       
                                   
                       if(activeUser){
