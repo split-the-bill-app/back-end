@@ -59,8 +59,8 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
                       const activeUser = await Users.findById(billForNotification.user_id);                                                 
                                   
                       if(activeUser){                                                    
-                          createdNotifications.forEach(notification => {          
-                            goSend.twilioNotification(
+                        createdNotifications.forEach(notification => {          
+                          goSend.twilioNotification(
                             notification.email,
                             activeUser.firstname,
                             activeUser.lastname,
