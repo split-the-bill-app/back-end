@@ -35,10 +35,10 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
       Bills.findById(bill_id)
       .then((billForNotificationFound) => {
         if(billForNotificationFound){         
-          billForNotification = {...billForNotificationFound};
+          billForNotification = {...billForNotificationFound};         
           
-          //first create and add the notifications to the database
           email.forEach(email => {
+            //create and add the notifications to the database
             Notification.add({ bill_id, email })        
             .then(id => {//returns an object with the id ---> { id: 9 } 
               if(id){
@@ -54,18 +54,13 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
                       created_at: billForNotification.created_at
                     });     
 
-                    console.log('created notifications 1--->', createdNotifications); 
-                    
-                    if(createdNotifications && createdNotifications.length === emailArrayLength){
-                      //then create and send twilio notification(s)      
-                      const activeUser = await Users.findById(billForNotification.user_id);      
-                      console.log('active User--->', activeUser);                       
+                    //create and send twilio notification(s)                    
+                    if(createdNotifications && createdNotifications.length === emailArrayLength){                        
+                      const activeUser = await Users.findById(billForNotification.user_id);                                                 
                                   
-                      if(activeUser){
-                        console.log('created notifications 2--->', createdNotifications);
-      
-                        createdNotifications.forEach(notification => {          
-                          goSend.twilioNotification(
+                      if(activeUser){                                                    
+                          createdNotifications.forEach(notification => {          
+                            goSend.twilioNotification(
                             notification.email,
                             activeUser.firstname,
                             activeUser.lastname,
@@ -79,23 +74,29 @@ router.post('/', AuthMiddleware.restricted, ValidateMiddleware.validateNotificat
                   }                  
                 })               
                 .catch(error => {     
-                  res.status(500).json({
-                    error: 'An error occurred while adding the notification(s) to the database.',
-                  });
+                  console.log('Notification query error.', error);
                 }); 
-                
+
               }else{
                 console.log('No id returned after adding a new notification.');
-              }      
-              
-             
+              }                   
             })
+            .catch(error => {     
+              res.status(500).json({
+                error: 'An error occurred while adding the notification(s) to the database.',
+              });
+            }); 
           });//end forEach      
           res.status(201).json({
             message: 'Notification(s) sent successfully.',
           });          
         }//end if        
       })
+      .catch(error => {     
+        res.status(500).json({
+          error: 'An error occurred while retrieving the bill from the database.',
+        });
+      }); 
       
     }else {
       res.status(400).json({
@@ -158,9 +159,7 @@ router.delete(
       res.status(200).json({
         message: `Notification ${id} was successfully deleted.`,
       });
-    } catch (error) {
-      console.log('deleted notification error--->', error);
-
+    }catch (error) {     
       const {
         params: { id },
       } = req;
