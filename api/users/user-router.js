@@ -8,7 +8,7 @@ const router = express.Router();
 const AuthMiddleware = require('../middleware/auth-middleware.js');
 const ValidateMiddleware = require('../middleware/validate-middleware.js');
 
-/***************************************ENDPOINTS BEGINNING WITH API/USERS****************************/
+/*********************************ENDPOINTS BEGINNING WITH API/USERS****************************/
 
 //GET ALL USERS
 router.get('/', AuthMiddleware.restricted, async (req, res) => {
@@ -57,7 +57,7 @@ router.get(
   },
 );
 
-//ADD A NEW USER
+//REGISTER A NEW USER
 router.post('/register', ValidateMiddleware.validateRegisterEmail, (req, res) => {
   let { email, password, firstname, lastname } = req.body;
 
@@ -128,34 +128,6 @@ router.post('/login', (req, res) => {
         .json({ errorMsg: 'Sorry, a server error occurred during login.' });        
     });
 });
-
-/* // DELETE A USER
-router.delete(
-  '/:id',
-  AuthMiddleware.restricted,
-  ValidateMiddleware.validateUserId,
-  async (req, res) => {
-    try {
-      const {
-        user: { id },
-      } = req;
-
-      const deleteUser = await Users.remove(id);
-
-      res.status(200).json({
-        message: `The user with the id of ${id} was successfully deleted.`,
-      });
-    } catch (error) {
-      const {
-        user: { id },
-      } = req;
-
-      res.status(500).json({
-        message: `The user with the id of ${id} could not be deleted.`,
-      });
-    }
-  },
-); */
 
 //UPDATE A USER
 router.put(

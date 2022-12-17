@@ -1,6 +1,5 @@
 const express = require('express');
 const helmet = require('helmet');
-const moment = require('moment');
 const cors = require('cors');
 
 //import routers
@@ -8,7 +7,7 @@ const UsersRouter = require('./api/users/user-router.js');
 const BillsRouter = require('./api/bills/bill-router.js');
 const NotificationsRouter = require('./api/notifications/notification-router.js');
 
-//creates an express application using the express module
+//creates express application 
 const server = express();
 
 server.use(express.json());

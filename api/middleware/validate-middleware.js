@@ -36,7 +36,7 @@ function validateUser(req, res, next) {
   } else if (!email || !firstname || !lastname) {
     res.status(400).json({
       warning:
-        'Missing required email, firstname or lastname for user.',
+        'Missing required user email, firstname, or lastname.',
     });
   } else {
     next();
