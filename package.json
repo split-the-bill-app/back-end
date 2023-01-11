@@ -34,7 +34,7 @@
     "helmet": "^3.21.2",
     "heroku": "^7.63.0",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^2.3.0",
+    "knex": "^2.4.0",
     "knex-cleaner": "^1.2.1",
     "moment": "^2.24.0",
     "pg": "^8.8.0",
