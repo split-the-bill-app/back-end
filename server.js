@@ -7,7 +7,7 @@ const UsersRouter = require('./api/users/user-router.js');
 const BillsRouter = require('./api/bills/bill-router.js');
 const NotificationsRouter = require('./api/notifications/notification-router.js');
 
-//creates express application 
+//create express application 
 const server = express();
 
 server.use(express.json());

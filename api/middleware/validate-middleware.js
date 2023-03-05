@@ -162,7 +162,7 @@ async function validateNotificationId(req, res, next) {
 
     const notification = await Notifications.findById(id);
 
-    bill
+    notification
       ? ((req.notification = notification), next())
       : res.status(404).json({
           info: `The notification with the id ${id} was not found during validation.`,

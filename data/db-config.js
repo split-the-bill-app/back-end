@@ -5,6 +5,7 @@ const knexConfig = require('../knexfile.js');
 const dbEnv = process.env.DB_ENV || 'development';
 console.log('ENV:', process.env.DB_ENV);
 
+//specify either dev or prod object to select from knexfile.js
 module.exports = knex(knexConfig[dbEnv]);
 
 
